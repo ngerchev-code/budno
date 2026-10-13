@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="budno-version" content="1.7.0">
+<meta name="budno-version" content="1.7.1">
 <title>NightCare EU</title>
 <style>/* required styles */
 
@@ -887,6 +887,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .leaflet-popup-content{font-family:var(--body);font-size:13.5px}
 .leaflet-popup-content a{font-weight:700}
 @media (prefers-color-scheme: dark){#vMap[data-layer="map"] .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.9) saturate(.85)}}
+.sos{color:var(--c-hosp);font:700 18px var(--display);text-decoration:none}
 .yes{color:var(--ok);font-weight:600} .no{color:var(--bad);font-weight:600}
 h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .extras{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
@@ -995,7 +996,7 @@ h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:
 //# sourceMappingURL=leaflet.js.map</script>
 <script>
 (function(){
-const VERSION='1.7.0';
+const VERSION='1.7.1';
 const CATS={
   p24:{label:'Денонощна аптека',short:'Аптеки 24/7',shape:'sq',glyph:'cross',desc:'Работи без прекъсване, често през нощно гише'},
   duty:{label:'Дежурна аптека',short:'Дежурни',shape:'ci',glyph:'cross',desc:'Удължено работно време тази вечер'},
@@ -1462,6 +1463,9 @@ function updInfo(){try{return NATIVE&&Android.getUpdateInfo?JSON.parse(Android.g
 function renderInfo(){
   const u=updInfo();
   $('vInfo').innerHTML=`<div class="hero"><svg width="64" height="64" style="border-radius:16px;flex:none"><use href="#logo"/></svg><div><h1>NightCare EU</h1><p>Помощ денонощно: аптеки, болници и спешни отделения, ветеринари, магазини и бензиностанции. Версия ${VERSION}${u&&u.source==='online'?' · обновена онлайн':''}</p></div></div>
+ <div class="card"><h2>Спешни телефони</h2><ul>
+  <li><span style="color:var(--c-hosp)">${ic('call')}</span><span><b><a class="sos" href="tel:112">112</a> — Единен европейски номер за спешни случаи</b><small>Линейка, полиция, пожарна. Работи навсякъде в ЕС, безплатно, и без SIM карта</small></span></li>
+ </ul></div>
  <div class="card"><h2>Цветове и маркери</h2><ul>${Object.keys(CATS).map(k=>`<li><span>${mkSVG(k,30)}</span><span><b>${CATS[k].label}</b><small>${CATS[k].desc}</small></span></li>`).join('')}</ul></div>
  <div class="card"><h2>Знаци</h2><ul>
   <li><span><i class="gdot"></i></span><span><b>Златна точка</b><small>Индекс на доверие 4,5 или повече</small></span></li>
