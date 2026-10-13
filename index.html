@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="budno-version" content="1.1.0">
-<title>Будно</title>
+<meta name="budno-version" content="1.7.0">
+<title>NightCare EU</title>
 <style>/* required styles */
 
 .leaflet-pane,
@@ -673,7 +673,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 :root{
   --bg:#F1F3F8; --panel:#FFFFFF; --panel-2:#E9EDF5; --line:#D6DCE8; --fg:#121A2C; --muted:#56627C; --faint:#8A95AD;
   --accent:#D93673; --accent-soft:#F9DCE7;
-  --c-p24:#0F9C69; --c-duty:#1B82BC; --c-s24:#C2780B; --c-fuel:#7A4ED5; --on-cat:#FFFFFF;
+  --c-p24:#0F9C69; --c-duty:#1B82BC; --c-s24:#C2780B; --c-fuel:#7A4ED5; --c-hosp:#D7263D; --c-vet:#A9611E; --on-cat:#FFFFFF;
   --ok:#0F8F5A; --warn:#B36A00; --bad:#C7343F; --gold:#D29800;
   --m-land:#E5E9F0; --m-street:#D6DCE7; --m-road:#FFFFFF; --m-ring:#F1D49A; --m-water:#B9D4EC; --m-park:#CBE4D0; --m-mount:#D9DAD0; --m-label:#8690A6;
   --shadow:0 8px 24px rgba(20,30,60,.16); --scrim:rgba(10,14,28,.38);
@@ -685,7 +685,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 @media (prefers-color-scheme: dark){:root{
   --bg:#0D1220; --panel:#141B2D; --panel-2:#1D2640; --line:#28334F; --fg:#E8EDF7; --muted:#8E9AB5; --faint:#5E6A86;
   --accent:#FF6B9A; --accent-soft:#3A2033;
-  --c-p24:#3DD598; --c-duty:#45B8F0; --c-s24:#F5B13D; --c-fuel:#B48CFF; --on-cat:#0D1220;
+  --c-p24:#3DD598; --c-duty:#45B8F0; --c-s24:#F5B13D; --c-fuel:#B48CFF; --c-hosp:#FF5A5F; --c-vet:#E8A15A; --on-cat:#0D1220;
   --ok:#4ED69A; --warn:#F5B13D; --bad:#F2727A; --gold:#FFD25E;
   --m-land:#10172A; --m-street:#18213A; --m-road:#2A3656; --m-ring:#3B4A72; --m-water:#0E2842; --m-park:#12281F; --m-mount:#192033; --m-label:#5A6784;
   --shadow:0 10px 30px rgba(0,0,0,.5); --scrim:rgba(0,0,0,.5);
@@ -722,9 +722,9 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .rail .sep{flex:none;width:1px;background:var(--line);margin:6px 2px}
 .nhif-tag{font:600 10px/1 var(--mono);letter-spacing:.04em;padding:3px 5px;border-radius:5px;border:1px solid currentColor;color:var(--ok)}
 
-.views{position:relative;min-height:0}
+.appbar{grid-row:1}.rail{grid-row:2}.views{grid-row:3;position:relative;min-height:0}.navbar{grid-row:4}
 .view{position:absolute;inset:0}
-#vMap{overflow:hidden;background:var(--m-land);border-radius:24px 24px 0 0}
+#vMap{isolation:isolate;z-index:0;overflow:hidden;background:var(--m-land);border-radius:24px 24px 0 0}
 #map{position:absolute;inset:0;background:var(--m-land)}
 .leaflet-container{font-family:var(--body);background:#0b0f1a}
 .leaflet-control-attribution{font-size:9px!important;line-height:1.3;background:rgba(0,0,0,.45)!important;color:#e6e6e6!important;border-radius:8px 0 0 0;padding:1px 6px!important}
@@ -734,7 +734,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .bpin-in.closed{opacity:.55}
 .bpin-in.sel::before{content:'';position:absolute;inset:-7px;border-radius:50%;border:3px solid #fff;background:rgba(255,255,255,.22)}
 .bpin .mk .mk-body{stroke:#fff;stroke-width:2.4}
-.mk-p24{fill:var(--c-p24)} .mk-duty{fill:var(--c-duty)} .mk-s24{fill:var(--c-s24)} .mk-fuel{fill:var(--c-fuel)}
+.mk-p24{fill:var(--c-p24)} .mk-duty{fill:var(--c-duty)} .mk-s24{fill:var(--c-s24)} .mk-fuel{fill:var(--c-fuel)} .mk-hosp{fill:var(--c-hosp)} .mk-vet{fill:var(--c-vet)}
 .mk-glyph{fill:var(--on-cat)}
 .mk-glyph .st{fill:none;stroke:var(--on-cat);stroke-width:1.8;stroke-linecap:round}
 .bpin .mk-glyph{fill:#fff}.bpin .mk-glyph .st{stroke:#fff}
@@ -747,6 +747,9 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .acc{fill:var(--accent);fill-opacity:.1;stroke:var(--accent);stroke-opacity:.4;stroke-width:1}
 .routeline{stroke:#fff;stroke-width:3;stroke-dasharray:1 9;stroke-linecap:round;fill:none}
 [data-layer="map"] .routeline{stroke:var(--accent)}
+.routecase{stroke:#fff;stroke-opacity:.95;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.routepath{stroke:var(--accent);fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sheet.peek{max-height:52%}
 @media (prefers-reduced-motion:no-preference){.you .ring1{animation:pulse 2.4s ease-out infinite}}
 @keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.5);opacity:0}}
 .mapctl,.fab,.maplegend,.hint,.speed,.layerpop{z-index:1000}
@@ -787,7 +790,8 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .item-main{flex:1;min-width:0;display:grid;gap:4px}
 .item-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
 .item-top b{font-weight:600;font-size:15.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dist{font:500 12px var(--mono);color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.item-top b{min-width:0}
+.dist{flex:none;font:500 12px var(--mono);color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .item-meta{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 8px;align-items:center}
 .status{font-weight:600}
 .status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.bad{color:var(--bad)}
@@ -828,8 +832,8 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .badge{position:relative}
 .badge i{position:absolute;top:2px;right:12px;min-width:16px;height:16px;border-radius:8px;background:var(--accent);color:#fff;font:700 10px/16px var(--body);font-style:normal;padding:0 4px}
 
-.scrim{position:fixed;inset:0;background:var(--scrim);z-index:19}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;max-height:86%;overflow-y:auto;background:var(--panel);border-radius:28px 28px 0 0;box-shadow:var(--shadow);padding:0 18px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;transition:transform .22s ease}
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:5000}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:5001;max-height:86%;overflow-y:auto;background:var(--panel);border-radius:28px 28px 0 0;box-shadow:var(--shadow);padding:0 18px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;transition:transform .22s ease}
 .sheet.drag{transition:none}
 .sheet-top{position:sticky;top:0;background:var(--panel);padding-top:10px;z-index:1;display:grid;gap:10px;touch-action:none}
 .grab{width:36px;height:4px;border-radius:4px;background:var(--line);margin:0 auto 4px}
@@ -859,6 +863,30 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .facts dd{margin:0;min-width:0}
 .facts dd small{display:block;color:var(--muted);font-size:12.5px}
 .facts .ic{color:var(--muted);margin-top:1px;width:18px;height:18px}
+.nodata{color:var(--muted);font-style:italic}.tel{font-family:var(--mono);font-size:14px;-webkit-user-select:all;user-select:all}
+.verified a{color:var(--accent)}
+.verify{display:grid}
+.vrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.vrow:last-child{border-bottom:0}
+.seg{display:flex;background:var(--panel-2);border-radius:11px;padding:3px;gap:3px;flex:none}
+.seg button{padding:7px 16px;border-radius:9px;font-weight:600;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.mine{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-weight:600;color:var(--ok)}
+.mine .ic{width:14px;height:14px}
+.er-tag{font:600 10px/1 var(--mono);letter-spacing:.04em;padding:3px 5px;border-radius:5px;border:1px solid var(--c-hosp);color:var(--c-hosp)}
+.ins-tag{font-size:11.5px;font-weight:600;color:var(--muted)}
+.inslist{margin:0 0 4px;padding-left:18px;display:grid;gap:2px;font-size:13.5px}
+.geo-ask{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border-radius:16px;background:var(--accent-soft);color:var(--fg);font-weight:600;font-size:14px;text-align:left}
+.geo-ask .ic{color:var(--accent)}
+.geo-h{margin:4px 0 -2px}
+.geo-item{display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 14px;border-radius:14px;background:var(--panel);text-align:left}
+.geo-item .ic{color:var(--accent);margin-top:2px}
+.geo-item b{display:block;font-weight:600;font-size:14.5px}
+.geo-item small{display:block;color:var(--muted);font-size:12.5px}
+.geo-pin{width:30px;height:30px;margin:2px auto 0;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--accent);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.leaflet-popup-content{font-family:var(--body);font-size:13.5px}
+.leaflet-popup-content a{font-weight:700}
+@media (prefers-color-scheme: dark){#vMap[data-layer="map"] .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.9) saturate(.85)}}
 .yes{color:var(--ok);font-weight:600} .no{color:var(--bad);font-weight:600}
 h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .extras{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
@@ -869,7 +897,7 @@ h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:
 .phone button{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;background:var(--panel);font-size:13px;font-weight:600}
 .verified{margin:0;font-size:12px;color:var(--faint)}
 
-.toast{position:fixed;left:16px;right:16px;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--fg);color:var(--bg);padding:13px 16px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:var(--shadow)}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:6000;background:var(--fg);color:var(--bg);padding:13px 16px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:var(--shadow)}
 </style>
 </head>
 <body>
@@ -903,6 +931,9 @@ h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
   <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3.5l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
   <symbol id="i-nav" viewBox="0 0 24 24"><path d="M12 2.5l7.5 18.5-7.5-4-7.5 4z"/></symbol>
+  <symbol id="i-wash" viewBox="0 0 24 24"><path d="M12 3s5.5 6.2 5.5 10a5.5 5.5 0 0 1-11 0C6.5 9.2 12 3 12 3z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
   <symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></symbol>
@@ -917,7 +948,7 @@ h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:
   <header class="appbar">
     <label class="searchbar">
       <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
-      <input id="q" type="search" placeholder="Търси в Будно" autocomplete="off" enterkeyhint="search">
+      <input id="q" type="search" placeholder="Търси в NightCare EU" autocomplete="off" enterkeyhint="search">
       <select class="city" id="city" aria-label="Град">
         <option value="sofia">София</option><option value="plovdiv">Пловдив</option><option value="varna">Варна</option>
       </select>
@@ -928,7 +959,7 @@ h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:
     <section class="view" id="vMap">
       <div id="map"></div>
       <div class="speed" id="speed" hidden></div>
-      <div class="hint" id="hint">Натиснете бутона долу вдясно, за да ви следваме на живо, или докоснете картата</div>
+      <div class="hint" id="hint">Докоснете обект — ще ви намерим по GPS и ще покажем пътя до него</div>
       <div class="mapctl">
         <button id="layerBtn" aria-label="Изглед на картата"><svg class="ic"><use href="#i-layers"/></svg></button>
         <button id="zin" aria-label="Приближи"><svg class="ic"><use href="#i-plus"/></svg></button>
@@ -964,69 +995,132 @@ h3{margin:0 0 -4px;font:600 12px var(--body);letter-spacing:.1em;text-transform:
 //# sourceMappingURL=leaflet.js.map</script>
 <script>
 (function(){
-const VERSION='1.1.0';
+const VERSION='1.7.0';
 const CATS={
   p24:{label:'Денонощна аптека',short:'Аптеки 24/7',shape:'sq',glyph:'cross',desc:'Работи без прекъсване, често през нощно гише'},
   duty:{label:'Дежурна аптека',short:'Дежурни',shape:'ci',glyph:'cross',desc:'Удължено работно време тази вечер'},
   s24:{label:'Денонощен магазин',short:'Магазини 24/7',shape:'di',glyph:'bag',desc:'Хранителни стоки и всекидневни нужди'},
-  fuel:{label:'Бензиностанция 24/7',short:'Бензиностанции',shape:'hx',glyph:'drop',desc:'Магазин, кафе и тоалетна денонощно'}
+  fuel:{label:'Бензиностанция 24/7',short:'Бензиностанции',shape:'hx',glyph:'drop',desc:'Магазин, кафе и тоалетна денонощно'},
+  hosp:{label:'Болница',short:'Болници',shape:'oc',glyph:'H',desc:'Болници, спешни отделения и ЦСМП'},
+  vet:{label:'Ветеринарна клиника',short:'Ветеринари',shape:'ci',glyph:'paw',desc:'Ветеринарни клиники с вечерно или нощно работно време'}
 };
-const SHAPES={sq:'<rect x="-12" y="-12" width="24" height="24" rx="7"/>',ci:'<circle r="13.5"/>',di:'<path d="M0,-16.5L16.5,0L0,16.5L-16.5,0Z"/>',hx:'<path d="M-7.5,-13h15l7.5,13l-7.5,13h-15l-7.5,-13z"/>'};
-const GLYPHS={cross:'<path d="M-2.4,-7.5h4.8v5.1h5.1v4.8h-5.1v5.1h-4.8v-5.1h-5.1v-4.8h5.1z"/>',bag:'<path d="M-6,-2.2h12l-1.2,8.4h-9.6z"/><path class="st" d="M-3,-2.2v-1.6a3,3 0 0 1 6,0v1.6"/>',drop:'<path d="M0,-7.5C3,-3.5 5.5,-.5 5.5,2.2a5.5,5.5 0 0 1-11,0C-5.5,-.5-3,-3.5 0,-7.5z"/>'};
-const EXTRAS={erx:['Е-рецепта','rx'],stock:['Наличност онлайн','stock'],reserve:['Резервация на лекарства','reserve'],delivery:['Доставка до адрес','delivery'],ev:['EV зарядна станция','ev'],access:['Достъп с количка','access'],atm:['Банкомат','atm'],wifi:['Безплатен Wi‑Fi','wifi'],selfco:['Каса на самообслужване','self'],coffee:['Кафе','coffee'],wc:['Тоалетна','wc'],pickup:['Автомат за пратки','box'],nightwin:['Нощно гише','moon'],consult:['Консултация с фармацевт','consult']};
+const SHAPES={sq:'<rect x="-12" y="-12" width="24" height="24" rx="7"/>',ci:'<circle r="13.5"/>',di:'<path d="M0,-16.5L16.5,0L0,16.5L-16.5,0Z"/>',hx:'<path d="M-7.5,-13h15l7.5,13l-7.5,13h-15l-7.5,-13z"/>',oc:'<path d="M-6.5,-15h13l8.5,8.5v13l-8.5,8.5h-13l-8.5,-8.5v-13z"/>'};
+const GLYPHS={cross:'<path d="M-2.4,-7.5h4.8v5.1h5.1v4.8h-5.1v5.1h-4.8v-5.1h-5.1v-4.8h5.1z"/>',bag:'<path d="M-6,-2.2h12l-1.2,8.4h-9.6z"/><path class="st" d="M-3,-2.2v-1.6a3,3 0 0 1 6,0v1.6"/>',paw:'<circle cx="-5" cy="-3.5" r="2.3"/><circle cx="-1.7" cy="-7" r="2.3"/><circle cx="2.3" cy="-7" r="2.3"/><circle cx="5.4" cy="-3.3" r="2.3"/><path d="M-5,4.5c0-3.3 2.3-5.8 5-5.8s5,2.5 5,5.8c0,2.2-2.1,3.2-5,2.5C-2.9,7.7-5,6.7-5,4.5z"/>',H:'<path d="M-6,-7.5h3.4v5.6h5.2v-5.6h3.4v15h-3.4v-6h-5.2v6h-3.4z"/>',drop:'<path d="M0,-7.5C3,-3.5 5.5,-.5 5.5,2.2a5.5,5.5 0 0 1-11,0C-5.5,-.5-3,-3.5 0,-7.5z"/>'};
+const EXTRAS={erx:['Е-рецепта','rx'],stock:['Наличност онлайн','stock'],reserve:['Резервация на лекарства','reserve'],delivery:['Доставка до адрес','delivery'],ev:['EV зарядна станция','ev'],access:['Достъп с количка','access'],atm:['Банкомат','atm'],wifi:['Безплатен Wi‑Fi','wifi'],selfco:['Каса на самообслужване','self'],coffee:['Кафе','coffee'],wc:['Тоалетна','wc'],pickup:['Автомат за пратки','box'],nightwin:['Нощно гише','moon'],wash:['Автомивка','wash'],consult:['Консултация с фармацевт','consult']};
 
-/* city frames: sample positions are stored on a 0..W × 0..H grid and projected into these bounds */
 const CITIES={
- sofia:{name:'София',W:1000,H:800,lng:[23.20,23.45],lat:[42.765,42.625],center:[480,380]},
- plovdiv:{name:'Пловдив',W:1000,H:720,lng:[24.68,24.82],lat:[42.18,42.115],center:[500,340]},
- varna:{name:'Варна',W:1000,H:720,lng:[27.84,27.97],lat:[43.245,43.18],center:[580,380]}
+ sofia:{name:'София',lat:[42.80,42.58],lng:[23.15,23.50],ll:[42.6977,23.3219]},
+ plovdiv:{name:'Пловдив',lat:[42.21,42.09],lng:[24.65,24.85],ll:[42.1446,24.7495]},
+ varna:{name:'Варна',lat:[43.28,43.16],lng:[27.80,28.00],ll:[43.2141,27.9147]}
 };
-const toLL=(city,x,y)=>{const c=CITIES[city];return[c.lat[0]+(c.lat[1]-c.lat[0])*y/c.H,c.lng[0]+(c.lng[1]-c.lng[0])*x/c.W]};
-for(const k in CITIES)CITIES[k].ll=toLL(k,...CITIES[k].center);
 
+/* Real places from Google Maps, collected 13.10.2026. Ratings and review counts are Google's.
+   nhif / pay / park are filled only where a source states them; null means "no data". */
+const DATA_DATE='13.10.2026';
 const P=[
- {id:'s1',city:'sofia',n:'Аптека „Ведрина“',c:'p24',x:500,y:388,a:'бул. „Витоша“ 41',d:'Център',ph:'+359 2 980 12 41',r:4.8,rv:1240,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'paid',note:'Синя зона — безплатно 19:30–08:30'},ex:['erx','stock','reserve','nightwin','consult'],ver:2},
- {id:'s2',city:'sofia',n:'Аптека „Зорница“',c:'p24',x:612,y:438,a:'бул. „Цариградско шосе“ 115',d:'Изток',ph:'+359 2 870 44 10',r:4.6,rv:860,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:25,note:'Паркинг на търговския комплекс'},ex:['erx','stock','delivery','ev','access','pickup'],ver:1},
- {id:'s3',city:'sofia',n:'Аптека „Лъч“',c:'p24',x:765,y:505,a:'ж.к. Младост 1, бл. 28',d:'Младост',ph:'+359 2 975 30 08',r:4.3,rv:410,nhif:1,pay:{card:1,nfc:1,mob:0},park:{t:'street',note:'Нощем обикновено има свободни места'},ex:['erx','nightwin','access'],ver:6},
- {id:'s4',city:'sofia',n:'Аптека „Северна звезда“',c:'p24',x:392,y:205,a:'бул. „Ломско шосе“ 210',d:'Надежда',ph:'+359 2 938 77 52',r:4.1,rv:190,nhif:0,pay:{card:1,nfc:0,mob:0},park:{t:'free',n:8},ex:['nightwin'],ver:12},
- {id:'s5',city:'sofia',n:'Аптека „Еделвайс“',c:'duty',h:[8,24],x:468,y:540,a:'бул. „Черни връх“ 62',d:'Лозенец',ph:'+359 2 962 15 90',r:4.7,rv:520,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'paid',note:'Зелена зона — безплатно след 19:30'},ex:['erx','stock','reserve','delivery'],ver:1},
- {id:'s6',city:'sofia',n:'Аптека „Липа“',c:'duty',h:[7,23],x:248,y:485,a:'ж.к. Овча купел, ул. „Монтевидео“ 8',d:'Овча купел',ph:'+359 2 955 61 23',r:4.4,rv:230,nhif:1,pay:{card:1,nfc:1,mob:0},park:{t:'free',n:12},ex:['erx','access'],ver:3},
- {id:'s7',city:'sofia',n:'Маркет „Нощна смяна“',c:'s24',x:525,y:350,a:'ул. „Граф Игнатиев“ 18',d:'Център',ph:'+359 2 981 40 40',r:4.2,rv:980,pay:{card:1,nfc:1,mob:1},park:{t:'paid',note:'Синя зона — безплатно 19:30–08:30'},ex:['coffee','atm','selfco'],ver:4},
- {id:'s8',city:'sofia',n:'Денонощен „Квартален“',c:'s24',x:335,y:425,a:'ж.к. Красно село, бл. 191',d:'Красно село',ph:'+359 2 952 18 75',r:4.5,rv:340,pay:{card:1,nfc:1,mob:0},park:{t:'street'},ex:['coffee','atm'],ver:5},
- {id:'s9',city:'sofia',n:'Супер „Луна 24“',c:'s24',x:805,y:335,a:'ж.к. Дружба 2, ул. „Обиколна“ 50',d:'Дружба',ph:'+359 2 979 02 24',r:4.0,rv:150,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:30},ex:['selfco','wifi','access','delivery'],ver:2},
- {id:'s10',city:'sofia',n:'Мини маркет „Будилник“',c:'s24',x:150,y:330,a:'ж.к. Люлин 5, бл. 512',d:'Люлин',ph:'+359 2 925 66 31',r:3.8,rv:95,pay:{card:0,nfc:0,mob:0},park:{t:'free',n:6},ex:['atm'],ver:20},
- {id:'s11',city:'sofia',n:'Енергия Пойнт — Цариградско',c:'fuel',x:870,y:575,a:'бул. „Цариградско шосе“, км 9',d:'Младост 4',ph:'+359 2 976 90 09',r:4.4,rv:1530,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:40},ex:['ev','coffee','wc','atm','pickup'],ver:1},
- {id:'s12',city:'sofia',n:'Енергия Пойнт — Ботевградско',c:'fuel',x:705,y:172,a:'бул. „Ботевградско шосе“ 247',d:'Враждебна',ph:'+359 2 945 11 47',r:4.1,rv:640,pay:{card:1,nfc:1,mob:0},park:{t:'free',n:15},ex:['coffee','wc','atm'],ver:8},
- {id:'s13',city:'sofia',n:'Аптека „Студентска“',c:'p24',x:598,y:640,a:'Студентски град, ул. „Акад. Борис Стефанов“ 6',d:'Студентски град',ph:'+359 2 868 25 70',r:4.6,rv:710,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'street',note:'Нощем често няма места'},ex:['erx','stock','pickup','access','consult'],ver:3},
- {id:'s14',city:'sofia',n:'Енергия Пойнт — България',c:'fuel',x:262,y:612,a:'бул. „България“ 118',d:'Манастирски ливади',ph:'+359 2 958 03 18',r:4.3,rv:880,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:20},ex:['ev','coffee','wc','pickup'],ver:2},
- {id:'p1',city:'plovdiv',n:'Аптека „Тепе“',c:'p24',x:470,y:362,a:'ул. „Княз Александър I“ 30',d:'Център',ph:'+359 32 62 41 18',r:4.7,rv:690,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'paid',note:'Синя зона — безплатно след 19:00'},ex:['erx','stock','nightwin','consult'],ver:2},
- {id:'p2',city:'plovdiv',n:'Аптека „Марица“',c:'p24',x:520,y:132,a:'бул. „България“ 90',d:'Кършияка',ph:'+359 32 95 30 72',r:4.3,rv:280,nhif:1,pay:{card:1,nfc:1,mob:0},park:{t:'free',n:10},ex:['erx','access'],ver:5},
- {id:'p3',city:'plovdiv',n:'Аптека „Тракия“',c:'duty',h:[8,24],x:805,y:505,a:'ж.к. Тракия, бл. 102',d:'Тракия',ph:'+359 32 67 12 80',r:4.5,rv:360,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:18},ex:['erx','reserve','delivery'],ver:3},
- {id:'p4',city:'plovdiv',n:'Маркет „Ден и нощ“',c:'s24',x:300,y:505,a:'бул. „Пещерско шосе“ 40',d:'Смирненски',ph:'+359 32 64 77 01',r:4.1,rv:210,pay:{card:1,nfc:1,mob:0},park:{t:'street'},ex:['coffee','atm'],ver:9},
- {id:'p5',city:'plovdiv',n:'Денонощен „Капана“',c:'s24',x:500,y:298,a:'ул. „Абаджийска“ 5',d:'Център',ph:'+359 32 63 05 55',r:4.6,rv:520,pay:{card:1,nfc:1,mob:1},park:{t:'none',note:'Пешеходна зона'},ex:['coffee','selfco','wifi'],ver:1},
- {id:'p6',city:'plovdiv',n:'Енергия Пойнт — Кукленско',c:'fuel',x:760,y:600,a:'Кукленско шосе 12',d:'Тракия',ph:'+359 32 68 20 12',r:4.2,rv:700,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:25},ex:['ev','coffee','wc','atm'],ver:4},
- {id:'p7',city:'plovdiv',n:'Аптека „Изгрев“',c:'p24',x:865,y:385,a:'ж.к. Изгрев, ул. „Шести септември“ 220',d:'Изгрев',ph:'+359 32 96 14 49',r:4.0,rv:120,nhif:0,pay:{card:1,nfc:0,mob:0},park:{t:'free',n:5},ex:['nightwin'],ver:15},
- {id:'v1',city:'varna',n:'Аптека „Морска“',c:'p24',x:618,y:442,a:'бул. „Княз Борис I“ 74',d:'Център',ph:'+359 52 60 33 41',r:4.8,rv:920,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'paid',note:'Синя зона — безплатно след 18:00'},ex:['erx','stock','reserve','nightwin','consult','delivery'],ver:1},
- {id:'v2',city:'varna',n:'Аптека „Чайка“',c:'p24',x:800,y:300,a:'ж.к. Чайка, бл. 18',d:'Чайка',ph:'+359 52 30 72 16',r:4.4,rv:300,nhif:1,pay:{card:1,nfc:1,mob:0},park:{t:'street'},ex:['erx','access'],ver:4},
- {id:'v3',city:'varna',n:'Аптека „Младост“',c:'duty',h:[8,23],x:250,y:282,a:'ж.к. Младост, бл. 120',d:'Младост',ph:'+359 52 50 18 93',r:4.2,rv:180,nhif:1,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:9},ex:['erx','stock'],ver:6},
- {id:'v4',city:'varna',n:'Маркет „Фар“',c:'s24',x:578,y:402,a:'ул. „Драгоман“ 22',d:'Център',ph:'+359 52 61 44 00',r:4.3,rv:410,pay:{card:1,nfc:1,mob:1},park:{t:'paid'},ex:['coffee','atm','selfco'],ver:3},
- {id:'v5',city:'varna',n:'Денонощен „Бриз“',c:'s24',x:885,y:195,a:'кв. Бриз, ул. „Ален мак“ 7',d:'Бриз',ph:'+359 52 37 81 22',r:4.6,rv:160,pay:{card:1,nfc:1,mob:0},park:{t:'free',n:12},ex:['coffee','wifi'],ver:2},
- {id:'v6',city:'varna',n:'Енергия Пойнт — Варненчик',c:'fuel',x:300,y:346,a:'бул. „Владислав Варненчик“ 258',d:'Възраждане',ph:'+359 52 51 09 58',r:4.3,rv:780,pay:{card:1,nfc:1,mob:1},park:{t:'free',n:30},ex:['ev','coffee','wc','pickup'],ver:2},
- {id:'v7',city:'varna',n:'Аптека „Левски“',c:'p24',x:660,y:255,a:'ж.к. Левски, бл. 37',d:'Левски',ph:'+359 52 74 26 37',r:3.9,rv:85,nhif:1,pay:{card:0,nfc:0,mob:0},park:{t:'street'},ex:['nightwin'],ver:18}
+ {id:'s1',city:'sofia',n:'Нон-стоп аптека AMAYA',c:'p24',lat:42.6892747,lng:23.3431743,a:'ул. „Цар Иван Асен II“ 42',d:'Яворов',ph:'+359 87 688 0400',r:4.1,rv:169,gid:'ChIJW-WcJpmFqkARVajj66MLQxI'},
+ {id:'s2',city:'sofia',n:'24-часова аптека The Corner of Health',c:'p24',lat:42.6453833,lng:23.3330771,a:'ул. „Георги Райчев“ 1',d:'кв. Витоша',ph:'+359 2 444 4448',r:4.3,rv:115,gid:'ChIJy_-LaHyFqkARtEDl2aZsK3I',park:{t:'street',note:'По отзиви: лесно се намира място'}},
+ {id:'s3',city:'sofia',n:'Денонощна аптека 7/24',c:'p24',lat:42.6922831,lng:23.2957913,a:'ул. „Гюешево“ 73',d:'Сердика',ph:'+359 88 411 0541',r:3.9,rv:106,gid:'ChIJpVx2KAeFqkARXe31tUKN39o'},
+ {id:'s4',city:'sofia',n:'Денонощна аптека 7/24',c:'p24',lat:42.6837945,lng:23.241759,a:'бул. „Президент Линкълн“ 114',d:'Овча купел 2',ph:'+359 2 483 3933',r:4.0,rv:81,gid:'ChIJ79krJ3GbqkARQDoRxUOQ-wg',pay:{card:1,src:'по отзиви'}},
+ {id:'s5',city:'sofia',n:'Нон-стоп аптека',c:'p24',lat:42.6959885,lng:23.2866973,a:'бул. „Възкресение“',d:'Красна поляна 1',ph:null,r:3.9,rv:87,gid:'ChIJJ-Hd7zSFqkARcjT1AYL651U'},
+ {id:'s6',city:'sofia',n:'Аптека Вира',c:'p24',lat:42.6801343,lng:23.3713891,a:'ул. „Иван Димитров-Куклата“ 4',d:'Христо Смирненски',ph:'+359 2 975 4001',r:4.5,rv:234,gid:'ChIJq2LfaN2FqkAR_PguC1jaU8M'},
+ {id:'s7',city:'sofia',n:'Аптека Авицена',c:'p24',lat:42.6893571,lng:23.3060719,a:'ул. „Константин Иречек“ 2',d:'Крива река',ph:'+359 2 954 9635',r:4.2,rv:120,gid:'ChIJ11er8D2FqkARbs488zHSGxU'},
+ {id:'s8',city:'sofia',n:'Аптека Нове',c:'p24',lat:42.6402057,lng:23.3819888,a:'ж.к. Младост 3, бл. 344А',d:'Младост 3',ph:'+359 87 912 1971',r:4.4,rv:20,gid:'ChIJJa4NtpmHqkARurOaVY3Yh_8'},
+ {id:'s9',city:'sofia',n:'Аптека Колибри',c:'p24',lat:42.6529482,lng:23.3617103,a:'ул. „Софийско поле“ 2',d:'Дървеница',ph:'+359 87 833 7382',r:3.8,rv:95,gid:'ChIJYwEbc52GqkARWi38Ogh4MMs',pay:{card:1,src:'по отзиви'}},
+ {id:'s10',city:'sofia',n:'Аптека „Вайс“',c:'duty',h:[8,22],hnote:'Събота и неделя до 21:00',lat:42.6422998,lng:23.3700875,a:'ж.к. Младост 2, бл. 219В',d:'Младост 2',ph:'+359 87 890 8903',r:4.9,rv:118,gid:'ChIJhXPkMxqHqkAR_Ar4KBjTZRc'},
+ {id:'s11',city:'sofia',n:'Аптека HERA 4',c:'duty',h:[8,22],lat:42.6562181,lng:23.3759857,a:'ул. „Йерусалим“ 39А',d:'Младост 1',ph:'+359 700 91 109',r:4.1,rv:123,gid:'ChIJpaIX5YWGqkARMIFnrkNpFvk',pay:{card:1,src:'по отзиви, възможна минимална сума'}},
+ {id:'s12',city:'sofia',n:'Денонощен магазин',c:'s24',lat:42.6840008,lng:23.3603876,a:'ул. „Гео Милев“ 37А',d:'Гео Милев',ph:null,r:4.6,rv:86,gid:'ChIJtygGvuqFqkARLAcG8NcO2T8'},
+ {id:'s13',city:'sofia',n:'С2Н5ОН Стоп',c:'s24',lat:42.6537136,lng:23.34647,a:'ул. „Йордан Йосифов“ 2',d:'Студентски град',ph:'+359 88 515 6315',r:4.3,rv:87,gid:'ChIJuegWge6FqkARbnVGCk0K-iI'},
+ {id:'s14',city:'sofia',n:'Нон-стоп маркет',c:'s24',lat:42.6676753,lng:23.3189049,a:'бул. „Черни връх“ 41',d:'Лозенец',ph:null,r:4.2,rv:102,gid:'ChIJxWrfWFaEqkAR2NsCPiHJLBs'},
+ {id:'s15',city:'sofia',n:'Ballantine’s 24/7',c:'s24',lat:42.6925248,lng:23.3115023,a:'бул. „Македония“ 29',d:'Център',ph:'+359 89 855 7518',r:4.9,rv:72,gid:'ChIJWxQTPhWFqkARfmWLJCcog6E'},
+ {id:'s16',city:'sofia',n:'Денонощен супермаркет „Бела“',c:'s24',lat:42.6702513,lng:23.2497374,a:'ул. „Коренята“ 7',d:'Карпузица',ph:'+359 2 443 3333',r:5.0,rv:43,gid:'ChIJS-Eq-uObqkARk45B7HXhqIM'},
+ {id:'s17',city:'sofia',n:'Shell — Опълченска',c:'fuel',lat:42.705161,lng:23.311175,a:'ул. „Опълченска“ 46-48',d:'Център',ph:'+359 89 268 4666',r:4.0,rv:281,gid:'ChIJf3GnbVuFqkAR9iIg0I4gKMg',ex:['coffee','wc']},
+ {id:'s18',city:'sofia',n:'OMV — бул. Ив. Евстратиев Гешов',c:'fuel',lat:42.6911024,lng:23.295548,a:'бул. „Акад. Иван Евстратиев Гешов“ 2Д',d:'Сердика',ph:'+359 87 651 4466',r:4.1,rv:963,gid:'ChIJf6PiajqFqkARfQgOOIGGC-k',ex:['wash']},
+ {id:'s19',city:'sofia',n:'OMV — Орландовци',c:'fuel',lat:42.7117612,lng:23.3310635,a:'бул. „История Славянобългарска“ 1Б',d:'Орландовци',ph:'+359 87 631 5967',r:4.0,rv:361,gid:'ChIJt0MclYuPqkAR227op_rbn-8',ex:['wc']},
+ {id:'s20',city:'sofia',n:'ЕКО — Люлин',c:'fuel',lat:42.7183553,lng:23.2543217,a:'бул. „Панчо Владигеров“ / ул. 701',d:'Люлин-център',ph:'+359 89 444 2506',r:4.3,rv:404,gid:'ChIJU1RrJISaqkARnQ9pWShIgzg',ex:['wash']},
+ {id:'s21',city:'sofia',n:'OMV — Слатинска',c:'fuel',lat:42.6909377,lng:23.3699585,a:'ул. „Слатинска“ 9',d:'Христо Смирненски',ph:'+359 87 630 7774',r:4.0,rv:471,gid:'ChIJr8CxcvKFqkARzhKJNthZUvM',ex:['coffee']},
+
+ {id:'s22',city:'sofia',n:'Денонощна аптека „Фрея“',c:'p24',lat:42.7274471,lng:23.3009623,a:'ж.к. Надежда 1, бл. 172Е',d:'Надежда 1',ph:'+359 87 772 5115',r:4.3,rv:61,gid:'ChIJjzX1tRuQqkAR6c9wQq4FKVc'},
+ {id:'s23',city:'sofia',n:'Нон-стоп аптека „Детелина“',c:'p24',lat:42.7439884,lng:23.2790345,a:'ж.к. Обеля, бл. 264',d:'Обеля',ph:'+359 88 479 5533',r:4.3,rv:120,gid:'ChIJUydboVuQqkARr3cxMeqe6ds'},
+ {id:'s24',city:'sofia',n:'Аптека „Св. Мина“',c:'p24',unc:'Според отзивите работи и нощем, но в Google е с работно време 8:00–20:00. Непотвърдено.',lat:42.732554,lng:23.2963846,a:'бул. „Ломско шосе“ 148',d:'Надежда 4',ph:null,r:4.6,rv:48,gid:'ChIJoQnEQhaQqkAR18dbVm8i6Gc'},
+ {id:'s25',city:'sofia',n:'Аптека „Дигификс 2“',c:'duty',h:[8,24],hnote:'По отзиви обслужва и след полунощ — проверете по телефона',lat:42.6983302,lng:23.3099172,a:'бул. „Александър Стамболийски“ 89',d:'Център',ph:'+359 88 767 4182',r:3.8,rv:69,gid:'ChIJ3RqbQZmFqkARqbWO4WA5ECw'},
+ {id:'s26',city:'sofia',n:'Аптека „Нове 5“',c:'duty',h:[8,23],hnote:'Вече не е денонощна — в Google е до 23:00, отзивите потвърждават',lat:42.6992201,lng:23.3066938,a:'бул. „Александър Стамболийски“ 100',d:'Център',ph:'+359 89 455 0772',r:3.9,rv:165,gid:'ChIJ-xWN7WOFqkARUbYJByEiuHk'},
+ {id:'h1',city:'sofia',n:'УМБАЛСМ „Н. И. Пирогов“ — Спешна помощ',c:'hosp',er:1,erNote:'Детско спешно отделение също работи 24 ч. в комплекса',lat:42.6901159,lng:23.3072369,a:'бул. „Ген. Едуард Тотлебен“ 21',d:'Пет кьошета',ph:'+359 2 915 4411',r:3.3,rv:419,gid:'ChIJ90z5gy-FqkARuwhDCpWpgNI'},
+ {id:'h2',city:'sofia',n:'УМБАЛ „Св. Анна“',c:'hosp',er:1,lat:42.6605264,lng:23.3733558,a:'ул. „Димитър Моллов“ 1',d:'Младост 1',ph:'+359 2 975 9000',r:3.7,rv:2053,gid:'ChIJ5Ua23ICGqkARAWm7BuXuGv8'},
+ {id:'h3',city:'sofia',n:'УМБАЛ „Царица Йоанна – ИСУЛ“ — Спешно',c:'hosp',er:1,lat:42.7007245,lng:23.338032,a:'ул. „Бяло море“ 8',d:'Център',ph:'+359 2 943 2170',r:2.5,rv:154,gid:'ChIJwxe_YHmFqkARHHCQoL56BKg'},
+ {id:'h4',city:'sofia',n:'ВМА — Спешна медицинска помощ',c:'hosp',er:1,lat:42.6837165,lng:23.3029976,a:'ул. „Св. Георги Софийски“ 3',d:'Център',ph:'+359 2 922 6000',r:3.3,rv:68,gid:'ChIJtYR99uKFqkARhxePmjAmVjo'},
+ {id:'h5',city:'sofia',n:'УМБАЛ „Александровска“',c:'hosp',h:[6,17],hnote:'Работно време на сградата по Google. Детската клиника работи 24 ч. — тел. +359 2 923 0640',lat:42.6854424,lng:23.3113795,a:'ул. „Св. Георги Софийски“ 1',d:'Център',ph:'+359 2 923 0592',r:3.2,rv:391,gid:'ChIJcyaiZxeFqkARwOMX0BAGsQw'},
+ {id:'h6',city:'sofia',n:'УМБАЛ „Лозенец“',c:'hosp',er:1,lat:42.6644169,lng:23.311265,a:'ул. „Козяк“ 1',d:'Лозенец',ph:'+359 2 960 7682',r:4.0,rv:401,gid:'ChIJEQrVcViEqkARFmQD5SdOzGY',nhif:{v:1,note:'Източник: официален сайт на болницата, раздел „Финансиране“'},ins:{none:'Работи с дружества за доброволно здравно осигуряване, но не публикува имената им',src:'lozenetz-hospital.bg'}},
+ {id:'h7',city:'sofia',n:'Аджибадем Сити Клиник УМБАЛ „Токуда“',c:'hosp',er:1,lat:42.664988,lng:23.3251855,a:'бул. „Никола Вапцаров“ 51Б',d:'Хладилника',ph:'+359 2 403 4000',r:4.3,rv:6809,gid:'ChIJBz9UQVGEqkARmnKYZyLJsV8'},
+ {id:'h8',city:'sofia',n:'Аджибадем Сити Клиник УМБАЛ Младост',c:'hosp',closedSun:1,hnote:'По Google: понеделник–събота 24 ч., неделя затворено',lat:42.6556303,lng:23.3860181,a:'бул. „Цариградско шосе“ 66А',d:'7-ми километър',ph:'+359 700 13 127',r:4.3,rv:1685,gid:'ChIJqSqpvYuGqkARkcOc-RE_BFo',ins:{list:['ЗК „Аксиом“','ДЗИ – Животозастраховане','ОЗОФ „Доверие“','Уника Живот','Евроинс Здравно осигуряване','Фи Хелт Застраховане','Дженерали Застраховане','ЗАД „България“','Булстрад Живот Виена Иншурънс Груп','Феникс Иншурънс'],src:'superdoc.bg (ДКЦ на същия адрес)'}},
+ {id:'h9',city:'sofia',n:'УМБАЛ „Софиямед“',c:'hosp',er:1,lat:42.6670642,lng:23.3643936,a:'бул. „Д-р Г. М. Димитров“ 16',d:'Дианабад',ph:'+359 89 555 5444',r:2.6,rv:968,gid:'ChIJvaFejdOFqkARRN23jpVLfes',ins:{list:['Фи Хелт Застраховане','ДЗИ – Животозастраховане','Булстрад Живот Виена Иншурънс Груп','Уника Живот','Дженерали Застраховане','Животозастрахователен институт','Групама Застраховане','Алианц България'],src:'официален сайт на болницата, „Договори с фондове“'}},
+ {id:'h10',city:'sofia',n:'МБАЛ „Св. София“',c:'hosp',er:1,lat:42.6598814,lng:23.2848538,a:'бул. „България“ 104',d:'Манастирски ливади',ph:'+359 2 818 4600',r:3.1,rv:666,gid:'ChIJq5gv95SEqkARpPbLUdA5534'},
+ {id:'h11',city:'sofia',n:'УСБАЛССЗ „Св. Екатерина“',c:'hosp',er:1,erNote:'Специализирана болница за сърдечно-съдови заболявания',lat:42.6850982,lng:23.3125041,a:'бул. „Пенчо Славейков“ 52А',d:'Център',ph:'+359 700 12 131',r:3.6,rv:198,gid:'ChIJF8Z6kRCFqkARDS_5Fmyn8KQ'},
+ {id:'h12',city:'sofia',n:'Детска болница „Проф. д-р Иван Митев“',c:'hosp',er:1,erNote:'Детска болница — приема деца и нощем',lat:42.6838787,lng:23.3018256,a:'бул. „Акад. Иван Евстратиев Гешов“ 11',d:'Център',ph:'+359 2 815 4211',r:3.8,rv:185,gid:'ChIJYaHxfyKFqkAR4eQU2sfWrt8'},
+ {id:'h13',city:'plovdiv',n:'УМБАЛ „Св. Георги“',c:'hosp',er:1,lat:42.1387156,lng:24.7115947,a:'бул. „Пещерско шосе“ 66',d:'Западен',ph:'+359 32 602 911',r:3.4,rv:670,gid:'ChIJ7WZkXSrQrBQRKRKIXjEF8io'},
+ {id:'h14',city:'plovdiv',n:'УМБАЛ „Пълмед“',c:'hosp',er:1,erNote:'По отзиви: спешният преглед е платен',lat:42.1376741,lng:24.7174344,a:'ул. „Перущица“ 1А',d:'Западен',ph:'+359 32 607 300',r:3.0,rv:469,gid:'ChIJR6MEBCvQrBQRWvg7zB1HcGs',nhif:{v:1,note:'Източник: superdoc.bg (ДКЦ „Пълмед“, същия адрес)'},ins:{list:['Булстрад Живот Виена Иншурънс Груп','Уника Живот','Алианц България'],src:'superdoc.bg (ДКЦ „Пълмед“, същия адрес)'}},
+ {id:'h15',city:'plovdiv',n:'УМБАЛ „Каспела“',c:'hosp',er:1,lat:42.1300015,lng:24.7159836,a:'ул. „София“ 64',d:'Христо Смирненски',ph:'+359 32 645 997',r:3.6,rv:459,gid:'ChIJBQfZiu7RrBQRDMtmMJ1C7Zg'},
+ {id:'h16',city:'plovdiv',n:'УМБАЛ „Еврохоспитал“',c:'hosp',er:1,lat:42.110986,lng:24.709277,a:'ул. „Коматевско шосе“ 79',d:'Южен',ph:'+359 32 207 015',r:3.3,rv:228,gid:'ChIJS9VfyiHQrBQRCBC8FD9ujuE'},
+ {id:'h17',city:'plovdiv',n:'Клиника „Медикус Алфа“',c:'hosp',er:1,lat:42.140211,lng:24.746675,a:'ул. „Велико Търново“ 21',d:'Център',ph:'+359 89 666 1171',r:4.5,rv:626,gid:'ChIJfZTY_7DRrBQR8NKUcFZ8psc'},
+ {id:'h18',city:'plovdiv',n:'Денонощен спешен кабинет (платен)',c:'hosp',er:1,erNote:'Частен кабинет, по отзиви прегледът е платен',lat:42.1485277,lng:24.7315099,a:'бул. „Васил Априлов“ 102',d:'Мараша',ph:'+359 89 500 0112',r:4.1,rv:55,gid:'ChIJi_CLF8rRrBQRa1zCpBBedEo'},
+ {id:'h19',city:'varna',n:'УМБАЛ „Св. Марина“',c:'hosp',er:1,lat:43.2271842,lng:27.9356634,a:'бул. „Христо Смирненски“ 1',d:'Приморски',ph:'+359 52 302 851',r:3.2,rv:718,gid:'ChIJOdiK8jhUpEARNmPYZfc7SnQ'},
+ {id:'h20',city:'varna',n:'МЦ „Св. Анна“ Варна',c:'hosp',unc:'Google няма работно време. По отзиви има дежурен и детски спешен кабинет нощем и в неделя. Непотвърдено.',lat:43.2124625,lng:27.9174165,a:'бул. „Цар Освободител“ 76',d:'Център',ph:'+359 52 821 661',r:3.2,rv:64,gid:'ChIJlb2sLXNUpEARwzJLMHeGjTo'},
+ {id:'h21',city:'varna',n:'Медицински комплекс „Майчин дом“',c:'hosp',er:1,erNote:'Акушерство и гинекология, има и детско отделение',lat:43.2200187,lng:27.9264704,a:'ул. „Мир“ 1',d:'Левски',ph:'+359 52 332 000',r:3.6,rv:343,gid:'ChIJy6lo6BRUpEARdACGuZNgAkA'},
+ {id:'h22',city:'varna',n:'Еврохоспитал Варна',c:'hosp',h:[9,16],weekdays:1,hnote:'По Google: понеделник–петък 9:00–16:00 (с обедна почивка 12–13)',lat:43.2407263,lng:27.9813804,a:'ул. „Найден Райков“ 2',d:'Виница',ph:'+359 89 463 8711',r:3.3,rv:207,gid:'ChIJ94VuFXZWpEARm-LcAXwTkQ0'},
+ {id:'h23',city:'sofia',n:'Първа МБАЛ — София',c:'hosp',er:1,lat:42.688557,lng:23.3224133,a:'Център',d:'Център',ph:'+359 2 805 9203',r:3.4,rv:145,gid:'ChIJywk0Bg2FqkARVZcQBYtvQxY'},
+ {id:'h24',city:'sofia',n:'Втора МБАЛ — София (II градска)',c:'hosp',er:1,lat:42.7061905,lng:23.3182884,a:'бул. „Христо Ботев“ 120',d:'Център',ph:'+359 2 915 8500',r:3.1,rv:110,gid:'ChIJi6X41V2FqkARV1EDxpOMcWI'},
+ {id:'h25',city:'sofia',n:'Национална кардиологична болница',c:'hosp',er:1,erNote:'Само сърдечни проблеми; има детска кардиология. По отзиви не приема други спешни случаи',lat:42.7061684,lng:23.2874353,a:'ул. „Коньовица“ 65',d:'Илинден',ph:'+359 2 921 1211',r:3.4,rv:336,gid:'ChIJia5VT7KaqkARjrKypH5bIiI'},
+ {id:'h26',city:'sofia',n:'ЦСМП София — Център за спешна медицинска помощ',c:'hosp',er:1,erNote:'Изпраща линейки. При спешен случай звънете на 112',lat:42.7044374,lng:23.3327655,a:'бул. „Васил Левски“ 129',d:'Център',ph:'+359 2 935 7221',r:4.1,rv:97,gid:'ChIJRyqeOWOFqkARgT0r96v4aOA'},
+ {id:'h27',city:'sofia',n:'Поликлиника „България“',c:'hosp',h:[8,22.5],hnote:'Не е денонощна — всеки ден 8:00–22:30 по Google. Частна, прегледите са платени',lat:42.6666025,lng:23.2898565,a:'бул. „България“ 51, ет. 3',d:'Мотописта',ph:'+359 88 755 0322',r:3.0,rv:528,gid:'ChIJEb45hemEqkARqW2zbbW_aVk'},
+ {id:'h28',city:'varna',n:'ЦСМП Варна — Център за спешна медицинска помощ',c:'hosp',er:1,erNote:'Изпраща линейки. При спешен случай звънете на 112',lat:43.2192626,lng:27.9163352,a:'ул. „Брегалница“ 3',d:'Център',ph:'+359 52 634 083',r:3.5,rv:29,gid:'ChIJsxLjuG5UpEAR-lEyFIoPPOk'},
+ {id:'t1',city:'sofia',n:'Ветеринарна клиника Animal Emergency',c:'vet',h:[18,24.5],hnote:'Всяка вечер 18:00–00:30 по Google',lat:42.6647908,lng:23.2842686,a:'ул. „Синанишко езеро“ 9А',d:'Манастирски ливади',ph:'+359 87 672 2755',r:3.9,rv:229,gid:'ChIJLVzuQGmFqkARoR3cBoDtauI'},
+ {id:'t2',city:'sofia',n:'Централна ветеринарна клиника',c:'vet',h:[8,21],lat:42.6578186,lng:23.3345747,a:'ул. „Чавдар Мутафов“ 25Б',d:'Зоопарка',ph:'+359 2 421 9999',r:4.2,rv:2822,gid:'ChIJvQ3tQ0eEqkARkPSx1OsyufQ'},
+ {id:'t3',city:'plovdiv',n:'Денонощен ветеринарен кабинет д-р Георги Колев',c:'vet',h:[9,25],hnote:'Всеки ден 9:00–01:00 по Google; по отзиви приема и по-късно при обаждане',lat:42.1353689,lng:24.7566609,a:'ул. „Михаил Такев“ 6',d:'Център',ph:'+359 89 925 2996',r:3.3,rv:80,gid:'ChIJO7YtE4jRrBQRmk4YTr41k4I'},
+ {id:'t4',city:'plovdiv',n:'Ветеринарна клиника „Д-р Капашиков и колектив“',c:'vet',h:[8,20],lat:42.1608132,lng:24.7498111,a:'ул. „Кольо Фичето“ 7А',d:'Гагарин',ph:'+359 87 612 3667',r:4.0,rv:349,gid:'ChIJV4Tsm3fRrBQRTT8dyd2g-q4'},
+ {id:'t5',city:'varna',n:'Ветеринарна клиника „Одесос“',c:'vet',h:[7.5,23.5],hnote:'Събота и неделя от 13:00 по Google',lat:43.2101965,lng:27.9089249,a:'ул. „Генерал Радко Димитриев“ 49',d:'Одесос',ph:'+359 52 643 304',r:4.7,rv:395,gid:'ChIJ15xe57hVpEARec_715BudsY'},
+ {id:'t6',city:'varna',n:'Обединена ветеринарна клиника',c:'vet',h:[8,22],lat:43.2177505,lng:27.9251804,a:'ул. „Царевец“ 34',d:'Център',ph:'+359 52 300 804',r:4.3,rv:2448,gid:'ChIJczTgZRNUpEARmWcN2V5HYyE'},
+ {id:'p1',city:'plovdiv',n:'Централфарм — денонощна аптека',c:'p24',lat:42.1593591,lng:24.7429614,a:'бул. „България“ 134 (ъгъла с ул. „Васил Левски“)',d:'Северен',ph:'+359 32 953 373',r:4.3,rv:156,gid:'ChIJQS2YyZPRrBQR_NDweH0rq90',ex:['nightwin']},
+ {id:'p2',city:'plovdiv',n:'Денонощна аптека Фрамар',c:'p24',lat:42.1407004,lng:24.7627326,a:'ул. „Богомил“ 84',d:'Каменица 1',ph:'+359 89 342 2238',r:3.8,rv:88,gid:'ChIJoYadVOLRrBQRpDfX4KKAWxc',park:{t:'street',note:'По отзиви: спиране на улицата'}},
+ {id:'p3',city:'plovdiv',n:'Денонощна аптека „Фармасити“',c:'p24',lat:42.1416623,lng:24.7883052,a:'бул. „Освобождение“ 31',d:'Тракия',ph:'+359 87 937 5209',r:4.8,rv:77,gid:'ChIJ25J0UwDRrBQR1Z-H6nSOKIg'},
+ {id:'p4',city:'plovdiv',n:'Аптека „Запад“ — денонощна',c:'p24',lat:42.1364699,lng:24.7158625,a:'бул. „Пещерско шосе“ 129В',d:'Западен',ph:'+359 88 760 6606',r:4.3,rv:75,gid:'ChIJUUgXSCrQrBQR4rsqsnmZjtY',pay:{card:1,nfc:1,src:'по отзиви'},park:{t:'street',note:'По отзиви: може да се спре пред аптеката'}},
+ {id:'p5',city:'plovdiv',n:'Аптека „Арт Фарма“',c:'duty',h:[8,24],lat:42.1243366,lng:24.7386427,a:'ул. „Димитър Талев“ 64',d:'Христо Ботев-юг',ph:'+359 32 676 710',r:3.7,rv:65,gid:'ChIJiRvgjUfQrBQRPkP9TX4AoTI',nhif:{v:1,note:'По отзиви: в събота, неделя и празници само с документи'},ex:['nightwin']},
+ {id:'p6',city:'plovdiv',n:'Point 24/7',c:'s24',lat:42.1400208,lng:24.7586354,a:'ул. „Богомил“ 50',d:'Каменица 1',ph:'+359 89 944 4441',r:4.5,rv:100,gid:'ChIJhfZuK6bRrBQRehb3duGqZlE'},
+ {id:'p7',city:'plovdiv',n:'Денонощен магазин',c:'s24',lat:42.1423474,lng:24.7427486,a:'ул. „Уилям Гладстон“ 60',d:'Център',ph:'+359 89 878 4429',r:4.3,rv:90,gid:'ChIJFaJwQLfRrBQRJGrhfD0ndgM',pay:{card:0,src:'по отзиви: няма терминал'}},
+ {id:'p8',city:'plovdiv',n:'Денонощен магазин Marini',c:'s24',lat:42.1601437,lng:24.7486347,a:'бул. „Цар Борис III Обединител“ 31',d:'Гагарин',ph:null,r:4.5,rv:65,gid:'ChIJZ_gI3_nRrBQRZeV45351n5w',pay:{card:0,src:'по отзиви'}},
+ {id:'p9',city:'plovdiv',n:'Нон стоп „Дарита“',c:'s24',lat:42.1360708,lng:24.7593622,a:'бул. „Христо Ботев“ 128',d:'Център',ph:'+359 87 750 5113',r:4.4,rv:84,gid:'ChIJvSaGmKnRrBQRcVFyQP7ORkA'},
+ {id:'p10',city:'plovdiv',n:'OMV — бул. България',c:'fuel',lat:42.1581754,lng:24.7343756,a:'бул. „България“ 97',d:'Северен',ph:'+359 87 719 6349',r:4.1,rv:920,gid:'ChIJm3GZouvRrBQRmfRPbteBoLs',ex:['coffee','wc']},
+ {id:'p11',city:'plovdiv',n:'Shell — 6-ти септември',c:'fuel',lat:42.153907,lng:24.763849,a:'бул. „6-ти септември“ 221',d:'Източен',ph:'+359 88 428 8989',r:4.1,rv:140,gid:'ChIJYxWvQ3bRrBQRNMGVQfARHBo',ex:['wash']},
+ {id:'p12',city:'plovdiv',n:'Shell — Христо Ботев',c:'fuel',lat:42.133444,lng:24.731083,a:'бул. „Христо Ботев“ 1Б',d:'Център',ph:'+359 88 399 8853',r:4.1,rv:311,gid:'ChIJM5o65zvRrBQRO6wI41FleUU'},
+ {id:'p13',city:'plovdiv',n:'Бензиностанция Light',c:'fuel',lat:42.1633474,lng:24.771848,a:'ул. „Рогошко шосе“ 32',d:'Северна промишлена зона',ph:'+359 88 258 0205',r:4.4,rv:547,gid:'ChIJlWszEn3RrBQRbx_4c-zxAsE',pay:{card:1,src:'по отзиви'}},
+
+ {id:'v1',city:'varna',n:'Денонощна аптека „Окръжна“',c:'p24',lat:43.212849,lng:27.9161255,a:'бул. „Цар Освободител“ 77А (бивша „Валя Дечева“)',d:'Център',ph:'+359 52 612 008',r:4.0,rv:253,gid:'ChIJDeaeGHNUpEAR599djte51WM',ex:['nightwin']},
+ {id:'v2',city:'varna',n:'Денонощна аптека „Живита“',c:'p24',lat:43.2119803,lng:27.9053072,a:'бул. „Владислав Варненчик“ 65',d:'Център',ph:'+359 52 607 033',r:4.4,rv:82,gid:'ChIJGYGcsn5UpEARtwK5WuxsbI8'},
+ {id:'v3',city:'varna',n:'Аптека „Ани Фарма“',c:'p24',lat:43.223019,lng:27.9291232,a:'ул. „Мир“ 8',d:'Левски',ph:'+359 89 966 6692',r:4.4,rv:42,gid:'ChIJCUxuGwBVpEAReGl66rRpc6M'},
+ {id:'v4',city:'varna',n:'Аптека „Санита“',c:'p24',lat:43.2140395,lng:27.9201027,a:'ул. „Генерал Колев“ 72',d:'Център',ph:'+359 52 602 560',r:3.5,rv:137,gid:'ChIJr53EUQ1UpEAR3FG6g_TpGVk'},
+ {id:'v5',city:'varna',n:'24 Hours Super',c:'s24',lat:43.2134413,lng:27.9029815,a:'Център, Одесос',d:'Център',ph:null,r:4.1,rv:149,gid:'ChIJOwKiYHdUpEARKgR-wsZ5quY'},
+ {id:'v6',city:'varna',n:'Nearby',c:'s24',lat:43.2488823,lng:27.8487264,a:'бул. „Константин I Фружин“ 20',d:'Владислав Варненчик',ph:'+359 89 798 2203',r:4.4,rv:577,gid:'ChIJZTFdvzCrpUARDJlyVRtC4Q0'},
+ {id:'v7',city:'varna',n:'White Bear',c:'s24',lat:43.2074754,lng:27.8952601,a:'ул. „Тодор Влайков“ 18-20',d:'Център',ph:'+359 88 275 3122',r:3.9,rv:170,gid:'ChIJxfisG4ZTpEAR-nIBlG-u-UA'},
+ {id:'v8',city:'varna',n:'Fresh — My Market',c:'s24',lat:43.2033329,lng:27.9196668,a:'пл. „Екзарх Йосиф“ 7',d:'Център',ph:null,r:4.1,rv:266,gid:'ChIJ64e_bCRTpEARjgamp9jxmNU'},
+ {id:'v9',city:'varna',n:'Чаталджа (300)',c:'s24',lat:43.2114273,lng:27.9265891,a:'ул. „Сава Радулов“ 7',d:'Център',ph:null,r:3.8,rv:162,gid:'ChIJt1K6QQ5UpEAR5uyso3I8GyY'},
+ {id:'v10',city:'varna',n:'ЕКО — Приморски',c:'fuel',lat:43.2198029,lng:27.9407416,a:'район Приморски',d:'Приморски',ph:'+359 89 444 2503',r:4.1,rv:350,gid:'ChIJXRDwSz1UpEARLlybM35DQkE'},
+ {id:'v11',city:'varna',n:'OMV — Автогара',c:'fuel',lat:43.216,lng:27.89665,a:'бул. „Владислав Варненчик“ 158А',d:'Младост',ph:'+359 87 680 1657',r:4.1,rv:1145,gid:'ChIJPYKJHXxUpEARK-IJMhfQAzY',ex:['coffee','wc','atm']},
+ {id:'v12',city:'varna',n:'Shell — Княз Борис I',c:'fuel',lat:43.215554,lng:27.95542,a:'бул. „Княз Борис I“ 23',d:'Салтанат',ph:'+359 88 751 1236',r:3.9,rv:139,gid:'ChIJlzIvm59WpEAR9WdXw-2AQ6g'},
+ {id:'v13',city:'varna',n:'Shell — Република',c:'fuel',lat:43.227629,lng:27.878491,a:'бул. „Република“',d:'Трошево',ph:'+359 88 932 2268',r:4.2,rv:214,gid:'ChIJP5yPJZdUpEAREPZOZy3Fxrc'},
+ {id:'v14',city:'varna',n:'Бензиностанция BENITA',c:'fuel',lat:43.2346333,lng:27.8757331,a:'бул. „Цар Освободител“ 177',d:'Възраждане',ph:'+359 89 455 6920',r:4.3,rv:243,gid:'ChIJ4WnS50ZVpEAR0W6GuneX9mY'}
 ];
 const M=4.2,C=50;
-P.forEach(p=>{p.idx=(C*M+p.r*p.rv)/(C+p.rv);p.idx1=Math.round(p.idx*10)/10;p.hi=p.idx1>=4.5;p.pharm=p.c==='p24'||p.c==='duty';p.ll=toLL(p.city,p.x,p.y)});
+P.forEach(p=>{p.ex=p.ex||[];p.idx=(C*M+p.r*p.rv)/(C+p.rv);p.idx1=Math.round(p.idx*10)/10;p.hi=p.idx1>=4.5;p.pharm=p.c==='p24'||p.c==='duty';p.hosp=p.c==='hosp';p.ll=[p.lat,p.lng]});
 
 const FLAGS=[
  ['open','Отворено сега','clock',p=>status(p).open],
- ['nhif','Здравна каса',null,p=>p.pharm&&p.nhif],
- ['card','Карта','card',p=>p.pay.card],
- ['park','Паркинг','park',p=>p.park.t!=='none'],
+ ['tocheck','За проверка','check',p=>p.pharm&&!nhifOf(p)],
  ['hi','Висок индекс','star',p=>p.hi],
- ['erx','Е-рецепта','rx',p=>p.ex.includes('erx')],
- ['delivery','Доставка','delivery',p=>p.ex.includes('delivery')],
- ['ev','EV зарядна','ev',p=>p.ex.includes('ev')],
- ['access','Достъпно','access',p=>p.ex.includes('access')]
+ ['phone','С телефон','call',p=>!!p.ph],
+ ['er','Спешно 24/7','clock',p=>!!(p.hosp&&p.er)],
+ ['nhif','Здравна каса',null,p=>{const n=nhifOf(p);return !!((p.pharm||p.hosp)&&n&&n.v===1)}],
+ ['ins','Доброволни фондове','shield',p=>!!(p.ins&&p.ins.list)],
+ ['card','Приема карта','card',p=>{const x=payOf(p);return !!(x&&x.card===1)}],
+ ['park','Паркинг','park',p=>{const k=parkOf(p);return !!(k&&k.t!=='none')}]
 ];
 
 const S={city:'sofia',cats:new Set(Object.keys(CATS)),flags:new Set(),q:'',sort:'near',sel:null,you:null,youReal:false,fav:new Set(),tab:'map',layer:'hybrid',tracking:false,follow:false,speed:0,heading:null};
@@ -1034,6 +1128,11 @@ const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON
 store.get('budno-fav',[]).forEach(x=>S.fav.add(x));
 {const c=store.get('budno-city',null);if(c&&CITIES[c])S.city=c}
 S.layer=store.get('budno-layer','hybrid');
+const VKEY='budno-verify';let VER=store.get(VKEY,{});
+const today=()=>new Date().toLocaleDateString('bg-BG');
+function nhifOf(p){const v=VER[p.id];if(v&&v.nhif!=null)return{v:v.nhif,note:'Потвърдено от вас на '+v.at,mine:1};return p.nhif||null}
+function payOf(p){const v=VER[p.id];if(v&&v.card!=null)return{card:v.card,src:'Потвърдено от вас на '+v.at,mine:1};return p.pay||null}
+function parkOf(p){const v=VER[p.id];if(v&&v.park!=null)return{t:v.park?'yes':'none',note:'Потвърдено от вас на '+v.at,mine:1};return p.park||null}
 
 const $=id=>document.getElementById(id);
 const NATIVE=typeof window.Android!=='undefined';
@@ -1041,15 +1140,21 @@ const ic=(n,cls)=>`<svg class="ic${cls?' '+cls:''}" aria-hidden="true"><use href
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num=(v,d=1)=>v.toLocaleString('bg-BG',{minimumFractionDigits:d,maximumFractionDigits:d});
 const mkSVG=(c,s)=>`<svg class="mk mk-${c}" viewBox="-18 -18 36 36" width="${s}" height="${s}" aria-hidden="true"><g class="mk-body">${SHAPES[CATS[c].shape]}</g><g class="mk-glyph">${GLYPHS[CATS[c].glyph]}</g></svg>`;
-const hh=h=>(h>=24?'24':String(h).padStart(2,'0'))+':00';
+const hh=h=>{if(h===24)return '24:00';const H=Math.floor(h)%24,m=Math.round((h-Math.floor(h))*60);return String(H).padStart(2,'0')+':'+String(m).padStart(2,'0')};
 const vibrate=()=>{try{navigator.vibrate&&navigator.vibrate(8)}catch(_){}};
 
 function status(p){
-  if(!p.h) return {open:true,cls:'ok',text:'Отворено · 24/7'};
-  const n=new Date(),t=n.getHours()+n.getMinutes()/60,open=t>=p.h[0]&&t<p.h[1];
-  if(!open) return {open:false,cls:'bad',text:'Затворено · отваря в '+hh(p.h[0])};
-  const soon=p.h[1]-t<=1;
-  return {open:true,cls:soon?'warn':'ok',text:(soon?'Затваря скоро · ':'Отворено до ')+hh(p.h[1])};
+  if(p.unc) return {open:true,cls:'warn',text:'Нощем според отзиви · непотвърдено'};
+  const dw=new Date().getDay();
+  if(p.closedSun&&dw===0) return {open:false,cls:'bad',text:'Затворено в неделя'};
+  if(p.weekdays&&(dw===0||dw===6)) return {open:false,cls:'bad',text:'Затворено през уикенда'};
+  if(!p.h) return {open:true,cls:'ok',text:p.hosp?(p.er?'Спешно · 24/7':'Отворено · 24 ч.'):'Отворено · 24/7'};
+  const n=new Date();let t=n.getHours()+n.getMinutes()/60;const o=p.h[0],c=p.h[1];
+  if(c>24&&t<c-24)t+=24;
+  const open=t>=o&&t<c;
+  if(!open) return {open:false,cls:'bad',text:'Затворено · отваря в '+hh(o)};
+  const soon=c-t<=1;
+  return {open:true,cls:soon?'warn':'ok',text:(soon?'Затваря скоро · ':'Отворено до ')+hh(c)};
 }
 function hav(a,b){const R=6371,r=Math.PI/180,dl=(b[0]-a[0])*r,dn=(b[1]-a[1])*r;const x=Math.sin(dl/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 const distKm=p=>hav(S.you,p.ll);
@@ -1078,7 +1183,7 @@ $('rail').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;vibrate();
   if(b.dataset.cat){const k=b.dataset.cat;
     if(S.cats.has(k)&&S.cats.size===1)S.cats=new Set(Object.keys(CATS));
-    else if(S.cats.size===4)S.cats=new Set([k]);
+    else if(S.cats.size===Object.keys(CATS).length)S.cats=new Set([k]);
     else S.cats.has(k)?S.cats.delete(k):S.cats.add(k);
   }else{const k=b.dataset.flag;S.flags.has(k)?S.flags.delete(k):S.flags.add(k)}
   renderRail();render();
@@ -1086,23 +1191,46 @@ $('rail').addEventListener('click',e=>{
 
 /* list */
 function feats(p){
-  let f=`<span class="idx${p.hi?' hi':''}">${ic('star','fill')}${num(p.idx1)} <small>(${p.rv.toLocaleString('bg-BG')})</small></span>`;
-  if(p.pharm&&p.nhif) f+='<span class="nhif-tag">НЗОК</span>';
-  f+=p.pay.card?ic(p.pay.nfc?'nfc':'card'):'<span class="cash">БРОЙ</span>';
-  if(p.park.t==='free') f+=ic('park');
-  if(p.ex.includes('ev')) f+=ic('ev');
-  if(p.ex.includes('delivery')) f+=ic('delivery');
-  if(p.ex.includes('access')) f+=ic('access');
+  let f=`<span class="idx${p.hi?' hi':''}">${ic('star','fill')}${num(p.r)} <small>(${p.rv.toLocaleString('bg-BG')})</small></span>`;
+  const nh=nhifOf(p),pay=payOf(p);
+  if((p.pharm||p.hosp)&&nh&&nh.v) f+='<span class="nhif-tag">НЗОК</span>';
+  if(p.hosp&&p.er) f+='<span class="er-tag">СПЕШНО</span>';
+  if(p.ins&&p.ins.list) f+=`<span class="ins-tag">${p.ins.list.length} фонда</span>`;
+  if(pay) f+=pay.card?ic(pay.nfc?'nfc':'card'):'<span class="cash">БРОЙ</span>';
+  if(VER[p.id]) f+=`<span class="mine">${ic('check')}проверено</span>`;
+  if(p.ph) f+=ic('call');
   if(S.fav.has(p.id)) f+=`<span style="color:var(--accent);display:flex">${ic('heart','fill')}</span>`;
   return f;
+}
+let geoRes=[],geoQ='',geoBusy=false,geoMarker=null;
+function geoSection(){const q=S.q.trim();
+  if(geoQ!==q)return `<button class="geo-ask" id="geoAsk">${ic('search')}<span>Търси улица, сграда или учреждение „${esc(q)}“</span></button>`;
+  if(geoBusy)return '<p class="demo">Търсим в картата…</p>';
+  if(geoRes===null)return '<p class="demo">Търсенето не успя. Проверете интернета и опитайте пак.</p>';
+  if(!geoRes.length)return `<p class="demo">Няма намерени улици или сгради за „${esc(q)}“ в ${CITIES[S.city].name}.</p>`;
+  return `<h3 class="geo-h">Улици, сгради и учреждения</h3>`+geoRes.map((g,i)=>{const parts=g.display_name.split(', ');
+    return `<button class="geo-item" data-geo="${i}">${ic('pin')}<span><b>${esc(g.name||parts[0])}</b><small>${esc(parts.slice(g.name?1:1,4).join(', '))}</small></span></button>`}).join('')}
+async function geocode(q){
+  q=q.trim();if(!q)return;const c=CITIES[S.city];geoQ=q;geoBusy=true;geoRes=[];render(true);
+  const u=`https://nominatim.openstreetmap.org/search?format=jsonv2&countrycodes=bg&accept-language=bg&limit=8&viewbox=${c.lng[0]},${c.lat[0]},${c.lng[1]},${c.lat[1]}&q=${encodeURIComponent(q)}`;
+  try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),10000);const r=await fetch(u,{signal:ctl.signal});geoRes=await r.json()}catch(e){geoRes=null}
+  geoBusy=false;if(geoQ===S.q.trim())render(true);
+}
+function showGeo(g){
+  const ll=[+g.lat,+g.lon],name=g.name||g.display_name.split(', ')[0];
+  if(geoMarker)map.removeLayer(geoMarker);
+  geoMarker=L.marker(ll,{icon:L.divIcon({className:'bpin',iconSize:[34,44],iconAnchor:[17,42],html:'<div class="geo-pin"></div>'}),zIndexOffset:1500}).addTo(map)
+   .bindPopup(`<b>${esc(name)}</b><br><small>${esc(g.display_name)}</small><br><a href="https://www.google.com/maps/dir/?api=1&destination=${ll[0]},${ll[1]}">Маршрут</a>`);
+  setTab('map');setTimeout(()=>{map.setView(ll,17);geoMarker.openPopup()},60);
 }
 function renderList(r){
   const fav=S.tab==='fav',openN=r.filter(p=>status(p).open).length;
   const sl={near:'Най-близо',idx:'По индекс',rv:'По отзиви'};
   let h=`<div class="listhead"><b>${fav?'Любими':r.length+' '+(r.length===1?'място':'места')} · ${CITIES[S.city].name}<small>${openN} отворени в момента${S.tracking?' · разстоянията се обновяват на живо':''}</small></b>
    <select id="sort" aria-label="Подреждане">${Object.entries(sl).map(([k,v])=>`<option value="${k}"${S.sort===k?' selected':''}>${v}</option>`).join('')}</select></div>`;
-  if(!fav) h+='<p class="demo">Обектите са примерни — имената, оценките и телефоните са измислени.</p>';
-  if(!r.length) h+=fav?`<div class="empty">${ic('heart')}<span>Още нямате любими в ${CITIES[S.city].name}.<br>Отворете обект и натиснете „Запази“.</span></div>`
+  if(!fav&&S.q.trim())h+=geoSection();
+  if(!fav) h+=`<p class="demo">Реални обекти от Google Maps към ${DATA_DATE}. Оценките са от отзивите в Google. Преди да тръгнете, проверете по телефона.</p>`;
+  if(!r.length&&(fav||!S.q.trim())) h+=fav?`<div class="empty">${ic('heart')}<span>Още нямате любими в ${CITIES[S.city].name}.<br>Отворете обект и натиснете „Запази“.</span></div>`
     :`<div class="empty">${ic('search')}<span>Няма места по тези филтри.</span><button class="chip" id="clear">Изчисти филтрите</button></div>`;
   r.forEach(p=>{const s=status(p);
     h+=`<button class="item${S.sel===p.id?' on':''}" data-id="${p.id}" style="--cc:var(--c-${p.c})">${mkSVG(p.c,34)}
@@ -1112,6 +1240,8 @@ function renderList(r){
   $('vList').innerHTML=h;
 }
 $('vList').addEventListener('click',e=>{
+  if(e.target.closest('#geoAsk')){geocode(S.q);return}
+  const gi=e.target.closest('.geo-item');if(gi){showGeo(geoRes[+gi.dataset.geo]);return}
   if(e.target.closest('#clear')){S.flags.clear();S.cats=new Set(Object.keys(CATS));S.q='';$('q').value='';renderRail();render();return}
   const b=e.target.closest('.item');if(b)select(b.dataset.id);
 });
@@ -1123,10 +1253,13 @@ const map=L.map('map',{zoomControl:false,attributionControl:true,minZoom:6,maxZo
 map.attributionControl.setPrefix(false);
 const esri=s=>`https://server.arcgisonline.com/ArcGIS/rest/services/${s}/MapServer/tile/{z}/{y}/{x}`;
 const ESRI_ATTR='Сателит: Esri, Maxar, Earthstar Geographics';
+const OSM_ATTR='© OpenStreetMap';
+const osmBg=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,maxNativeZoom:19,attribution:OSM_ATTR});
 const LAYERS={
-  hybrid:L.layerGroup([L.tileLayer(esri('World_Imagery'),{maxNativeZoom:19,maxZoom:19,attribution:ESRI_ATTR}),L.tileLayer(esri('Reference/World_Transportation'),{maxNativeZoom:19,maxZoom:19,opacity:.85}),L.tileLayer(esri('Reference/World_Boundaries_and_Places'),{maxNativeZoom:19,maxZoom:19})]),
+  hybrid:L.layerGroup([L.tileLayer(esri('World_Imagery'),{maxNativeZoom:19,maxZoom:19,attribution:ESRI_ATTR}),
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,attribution:'© OpenStreetMap © CARTO'})]),
   sat:L.tileLayer(esri('World_Imagery'),{maxNativeZoom:19,maxZoom:19,attribution:ESRI_ATTR}),
-  map:L.tileLayer(dark?'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,attribution:'© OpenStreetMap © CARTO'})
+  map:osmBg()
 };
 let curLayer=null;
 function setLayer(k){if(curLayer)map.removeLayer(curLayer);curLayer=LAYERS[k]||LAYERS.hybrid;curLayer.addTo(map);S.layer=k;store.set('budno-layer',k);
@@ -1157,11 +1290,12 @@ function drawYou(){
   else{youMarker.setLatLng(S.you);youMarker.setIcon(icn)}
   const sp=S.sel&&P.find(p=>p.id===S.sel);
   if(routeLine){map.removeLayer(routeLine);routeLine=null}
-  if(sp&&sp.city===S.city)routeLine=L.polyline([S.you,sp.ll],{className:'routeline',interactive:false}).addTo(map);
+  if(sp&&sp.city===S.city&&!routeLayer)routeLine=L.polyline([S.you,sp.ll],{className:'routeline',interactive:false}).addTo(map);
   $('speed').hidden=!(S.tracking&&S.speed>1);
   $('speed').innerHTML=`<b>${Math.round(S.speed*3.6)}</b><small>км/ч</small>`;
 }
 map.on('click',e=>{
+  if(S.sel){closeSheet();return}
   if(S.tracking){toast('Проследяването е включено — изключете го от бутона, за да изберете точка ръчно');return}
   S.you=[e.latlng.lat,e.latlng.lng];S.youReal=false;$('hint').hidden=true;vibrate();render();toast('Точката е зададена ръчно');
 });
@@ -1178,8 +1312,9 @@ let webWatch=null,firstFix=true,lastListRender=0;
 function fabState(){const f=$('fab');f.classList.toggle('on',S.tracking);f.classList.toggle('follow',S.follow);
   f.setAttribute('aria-label',!S.tracking?'Проследявай местоположението ми':S.follow?'Спри проследяването':'Следвай ме');
   f.innerHTML=ic(S.follow?'nav':'locate',S.follow?'fill':'')}
-function startTracking(){
-  S.tracking=true;S.follow=true;firstFix=true;$('fab').classList.add('busy');fabState();toast('Търсим вашето местоположение…');
+function startTracking(follow){
+  if(follow===undefined)follow=true;
+  S.tracking=true;S.follow=follow;firstFix=true;$('fab').classList.add('busy');fabState();toast('Определяме местоположението ви по GPS…');
   if(NATIVE){try{Android.startTracking();return}catch(_){}}
   if(navigator.geolocation)webWatch=navigator.geolocation.watchPosition(p=>budnoLocated(p.coords.latitude,p.coords.longitude,p.coords.accuracy,p.coords.speed,p.coords.heading),()=>budnoLocateFailed('denied'),{enableHighAccuracy:true,maximumAge:3000,timeout:20000});
   else budnoLocateFailed('off');
@@ -1191,7 +1326,7 @@ function stopTracking(){
   if(accCircle){map.removeLayer(accCircle);accCircle=null}
   drawYou();toast('Проследяването е спряно');
 }
-$('fab').onclick=()=>{vibrate();if(!S.tracking)startTracking();else if(!S.follow){S.follow=true;fabState();map.panTo(S.you)}else stopTracking()};
+$('fab').onclick=()=>{vibrate();if(!S.tracking)startTracking(true);else if(!S.follow){S.follow=true;fabState();map.panTo(S.you)}else stopTracking()};
 window.budnoLocated=function(lat,lng,acc,speed,heading){
   $('fab').classList.remove('busy');
   let found=null;
@@ -1200,53 +1335,101 @@ window.budnoLocated=function(lat,lng,acc,speed,heading){
   if(found&&found!==S.city){S.city=found;$('city').value=found;store.set('budno-city',found);closeSheet(true);toast('Показваме '+CITIES[found].name)}
   if(acc){if(!accCircle)accCircle=L.circle(S.you,{radius:acc,className:'acc',interactive:false}).addTo(map);else{accCircle.setLatLng(S.you);accCircle.setRadius(acc)}}
   if(firstFix){firstFix=false;if(S.follow&&S.tab==='map')map.setView(S.you,Math.max(map.getZoom(),15));
-    if(!found)toast('Обектите в демото са в София, Пловдив и Варна — картата следва вас навсякъде');}
+    if(!found)toast('Обектите засега са в София, Пловдив и Варна');}
   else if(S.follow&&S.tab==='map')map.panTo(S.you,{animate:true,duration:.6});
   lastR=results();drawYou();
   const now=Date.now();if(now-lastListRender>3000){lastListRender=now;render(true)}
-  const sp=S.sel&&P.find(p=>p.id===S.sel);if(sp&&$('shDist')){const km=distKm(sp);$('shDist').textContent=distText(km)+' · '+travel(km)}
+  const sp=S.sel&&P.find(p=>p.id===S.sel);
+  if(sp&&sp.city===S.city){
+    if(routeFor!==sp.id)fetchRoute(sp,true);
+    else if(routeFrom&&hav(routeFrom,S.you)>0.15&&Date.now()-routeAt>15000)fetchRoute(sp,false);
+    else updDist(sp);
+  }
 };
+/* road route from the user to the selected place (OSRM) */
+let routeLayer=null,routeFor=null,routeFrom=null,routeAt=0,routeInfo=null;
+function clearRoute(){if(routeLayer){map.removeLayer(routeLayer);routeLayer=null}routeFor=null;routeInfo=null;routeFrom=null}
+function fitRoute(ll){const sz=map.getSize();map.fitBounds(L.latLngBounds(ll),{paddingTopLeft:[40,70],paddingBottomRight:[40,Math.round(sz.y*.55)],maxZoom:16})}
+function updDist(p){const el=$('shDist');if(!el)return;const km=distKm(p);
+  el.textContent=routeInfo?`${num(routeInfo.km)} км по пътя · ≈ ${routeInfo.min} мин с кола`+(routeInfo.km<=2.5?` · ≈ ${Math.max(1,Math.round(routeInfo.km/4.8*60))} мин пеша`:''):(S.youReal?`${distText(km)} по права линия · изчисляваме маршрута…`:'Определяме местоположението ви…')}
+async function fetchRoute(p,fit){
+  if(!S.youReal)return;
+  const from=S.you.slice();routeFrom=from;routeAt=Date.now();routeFor=p.id;
+  try{
+    const ctl=new AbortController();setTimeout(()=>ctl.abort(),9000);
+    const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${p.lng},${p.lat}?overview=full&geometries=geojson`,{signal:ctl.signal});
+    const j=await r.json();if(S.sel!==p.id)return;
+    const rt=j.routes&&j.routes[0];if(!rt)throw new Error('no route');
+    const ll=rt.geometry.coordinates.map(c=>[c[1],c[0]]);
+    if(routeLayer)map.removeLayer(routeLayer);
+    routeLayer=L.layerGroup([L.polyline(ll,{className:'routecase',weight:10,interactive:false}),L.polyline(ll,{className:'routepath',weight:6,interactive:false})]).addTo(map);
+    routeInfo={km:rt.distance/1000,min:Math.max(1,Math.round(rt.duration/60))};
+    drawYou();updDist(p);
+    if(fit&&S.tab==='map')fitRoute(ll.concat([from]));
+  }catch(e){if(S.sel!==p.id)return;routeInfo=null;drawYou();
+    const el=$('shDist');if(el){const km=distKm(p);el.textContent=`${distText(km)} по права линия · ${travel(km)}`}
+    if(fit&&S.tab==='map')fitRoute([from,p.ll])}
+}
 window.budnoLocateFailed=function(r){
   $('fab').classList.remove('busy');S.tracking=false;S.follow=false;fabState();
-  toast({denied:'Няма разрешение за местоположение. Можете да го дадете от Настройки → Приложения → Будно.',off:'Местоположението на телефона е изключено.',timeout:'Не успяхме да ви открием. Опитайте отново навън или докоснете картата.'}[r]||'Местоположението не е налично.');
+  toast({denied:'Няма разрешение за местоположение. Можете да го дадете от Настройки → Приложения → NightCare EU.',off:'Местоположението на телефона е изключено.',timeout:'Не успяхме да ви открием. Опитайте отново навън или докоснете картата.'}[r]||'Местоположението не е налично.');
 };
 window.budnoToast=m=>toast(m);
 
 /* ---------- detail sheet ---------- */
-function parkText(pk){return {free:'Безплатен паркинг'+(pk.n?' · '+pk.n+' места':''),paid:'Платена зона',street:'Улично паркиране',none:'Няма паркиране наблизо'}[pk.t]+(pk.note?`<small>${esc(pk.note)}</small>`:'')}
-function select(id){
-  vibrate();S.sel=id;const p=P.find(x=>x.id===id),s=status(p),km=distKm(p);
-  const pay=p.pay.card?`Карта${p.pay.nfc?' · безконтактно':''}${p.pay.mob?'<small>Google Pay / Apple Pay</small>':''}`:'<span class="no">Само в брой</span>';
-  const [la,ln]=p.ll.map(v=>v.toFixed(5)),fav=S.fav.has(id);
+function parkText(pk){if(!pk)return '<span class="nodata">Няма данни</span>';return {free:'Безплатен паркинг'+(pk.n?' · '+pk.n+' места':''),paid:'Платена зона',street:'Улично паркиране',yes:'Има паркиране',none:'Няма паркиране наблизо'}[pk.t]+(pk.note?`<small>${esc(pk.note)}</small>`:'')}
+function payText(pay){if(!pay)return '<span class="nodata">Няма данни</span><small>Попитайте по телефона</small>';
+  return (pay.card?`Карта${pay.nfc?' · безконтактно':''}`:'<span class="no">Само в брой</span>')+(pay.src?`<small>${esc(pay.src)}</small>`:'')}
+function insText(i){if(!i)return '<span class="nodata">Няма публикувани данни</span><small>Попитайте вашия застраховател или болницата</small>';
+  if(i.none)return esc(i.none)+`<small>Източник: ${esc(i.src)}</small>`;
+  return `<ul class="inslist">${i.list.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><small>Източник: ${esc(i.src)}</small>`}
+function nhifText(n){if(!n)return '<span class="nodata">Няма потвърдени данни</span><small>Попитайте дали работи с НЗОК</small>';
+  return (n.v?'<span class="yes">Да</span> — договор с НЗОК':'<span class="no">Не</span>')+(n.note?`<small>${esc(n.note)}</small>`:'')}
+const mapsLink=p=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.n)}&query_place_id=${p.gid}`;
+function vrow(p,k,label,yes,no){const cur=VER[p.id]?VER[p.id][k]:null;
+  return `<div class="vrow"><span>${label}</span><div class="seg"><button data-act="v" data-k="${k}" data-v="1" aria-pressed="${cur===1}">${yes}</button><button data-act="v" data-k="${k}" data-v="0" aria-pressed="${cur===0}">${no}</button></div></div>`}
+function select(id,keep){
+  if(!keep)vibrate();const st0=$('sheet').scrollTop;S.sel=id;const p=P.find(x=>x.id===id),s=status(p),km=distKm(p),fav=S.fav.has(id);
+  const [la,ln]=p.ll.map(v=>v.toFixed(6));
   $('sheet').innerHTML=`<div class="sheet-top" id="sheetTop"><div class="grab" aria-hidden="true"></div>
    <div class="sh-head" style="--cc:var(--c-${p.c})">${mkSVG(p.c,42)}<div><p class="sh-cat">${CATS[p.c].label} · ${esc(p.d)}</p><h2>${esc(p.n)}</h2><p class="sh-addr">${esc(p.a)}, ${CITIES[p.city].name}</p></div>
    <button class="closebtn" data-act="close" aria-label="Затвори">${ic('x')}</button></div></div>
-   <div class="sh-status"><span class="status ${s.cls}">${s.text}</span><span id="shDist">${distText(km)} · ${travel(km)}</span>${S.youReal?'':'<span>от избраната точка</span>'}</div>
+   <div class="sh-status"><span class="status ${s.cls}">${s.text}</span><span id="shDist">${distText(km)} · ${travel(km)}</span></div>
    <div class="acts">
-    <a class="act primary" href="https://www.google.com/maps/dir/?api=1&destination=${la},${ln}"><span>${ic('route')}</span>Маршрут</a>
-    <a class="act" href="tel:${p.ph.replace(/\s/g,'')}"><span>${ic('call')}</span>Обади се</a>
+    <a class="act primary" href="https://www.google.com/maps/dir/?api=1&destination=${la},${ln}&destination_place_id=${p.gid}"><span>${ic('route')}</span>Маршрут</a>
+    ${p.ph?`<a class="act" href="tel:${p.ph.replace(/\s/g,'')}"><span>${ic('call')}</span>Обади се</a>`:`<a class="act" href="${mapsLink(p)}"><span>${ic('map')}</span>В Google</a>`}
     <button class="act${fav?' faved':''}" data-act="fav"><span>${ic('heart',fav?'fill':'')}</span>${fav?'Запазено':'Запази'}</button>
     <button class="act" data-act="share"><span>${ic('share')}</span>Сподели</button>
    </div>
-   <div class="score"><span class="big">${num(p.idx1)}</span><div class="bar"><i style="width:${(p.idx/5*100).toFixed(0)}%"></i></div>
-    <p>Оценка ${num(p.r)} от ${p.rv.toLocaleString('bg-BG')} отзива${p.hi?' · <b style="color:var(--gold)">Висок индекс</b>':''}</p>
+   <div class="score"><span class="big">${num(p.r)}</span><div class="bar"><i style="width:${(p.r/5*100).toFixed(0)}%"></i></div>
+    <p>${p.rv.toLocaleString('bg-BG')} отзива в Google · индекс на доверие ${num(p.idx1)}${p.hi?' · <b style="color:var(--gold)">Висок индекс</b>':''}</p>
     <p class="why">Индексът коригира оценката според броя отзиви: при малко отзиви тя се доближава до средното ${num(M)}.</p></div>
    <dl class="facts">
-    ${p.pharm?`<div>${ic('shield')}<dt>Здравна каса</dt><dd>${p.nhif?'<span class="yes">Да</span> — договор с НЗОК<small>Отпуска лекарства по е-рецепта с отстъпка</small>':'<span class="no">Не</span> — без договор с НЗОК<small>Лекарствата се плащат изцяло</small>'}</dd></div>`:''}
-    <div>${ic('wallet')}<dt>Плащане</dt><dd>${pay}</dd></div>
-    <div>${ic('park')}<dt>Паркиране</dt><dd>${parkText(p.park)}</dd></div>
-    <div>${ic('clock')}<dt>Работно време</dt><dd>${p.h?hh(p.h[0])+'–'+hh(p.h[1])+'<small>Дежурство по график на общината</small>':'Денонощно, без почивен ден'}</dd></div>
+    <div>${ic('call')}<dt>Телефон</dt><dd>${p.ph?`<span class="tel">${p.ph}</span>`:'<span class="nodata">Няма телефон в Google</span>'}</dd></div>
+    <div>${ic('clock')}<dt>Работно време</dt><dd>${p.unc?'<span class="nodata">Непотвърдено</span><small>'+esc(p.unc)+'</small>':p.h?hh(p.h[0])+'–'+hh(p.h[1])+(p.hnote?`<small>${esc(p.hnote)}</small>`:''):'Денонощно, 24/7'}</dd></div>
+    ${p.hosp?`<div>${ic('clock')}<dt>Спешна помощ</dt><dd>${p.er?'<span class="yes">24/7</span>'+(p.erNote?`<small>${esc(p.erNote)}</small>`:''):'<span class="nodata">Няма спешно 24/7 по данни на Google</span>'}</dd></div>`:''}
+    ${(p.pharm||p.hosp)?`<div>${ic('shield')}<dt>Здравна каса</dt><dd>${nhifText(nhifOf(p))}</dd></div>`:''}
+    ${p.hosp?`<div>${ic('wallet')}<dt>Доброволни фондове</dt><dd>${insText(p.ins)}</dd></div>`:''}
+    <div>${ic('wallet')}<dt>Плащане</dt><dd>${payText(payOf(p))}</dd></div>
+    <div>${ic('park')}<dt>Паркиране</dt><dd>${parkText(parkOf(p))}</dd></div>
    </dl>
-   ${p.ex.length?`<h3>Екстри</h3><ul class="extras" style="--cc:var(--c-${p.c})">${p.ex.map(k=>`<li>${ic(EXTRAS[k][1])}${EXTRAS[k][0]}</li>`).join('')}</ul>`:''}
-   <div class="phone"><span id="phone">${p.ph}</span><button data-act="copy">${ic('copy')}Копирай</button></div>
-   <p class="verified">Последна проверка на данните: преди ${p.ver} ${p.ver===1?'ден':'дни'}</p>`;
-  $('sheet').hidden=false;$('scrim').hidden=false;$('sheet').style.transform='';$('sheet').scrollTop=0;
-  if(S.tab==='map'){S.follow=false;fabState();
-    const z=Math.max(map.getZoom(),15),pt=map.project(p.ll,z),h=map.getSize().y;
-    map.setView(map.unproject(pt.add([0,h*.22]),z),z,{animate:true})}
+   ${p.ex.length?`<h3>Удобства</h3><ul class="extras" style="--cc:var(--c-${p.c})">${p.ex.map(k=>`<li>${ic(EXTRAS[k][1])}${EXTRAS[k][0]}</li>`).join('')}</ul>`:''}
+   <h3>Проверено ли е? Отбележете</h3>
+   <div class="verify">${(p.pharm||p.hosp)?vrow(p,'nhif','Работи с НЗОК','Да','Не'):''}${vrow(p,'card','Приема карта','Да','Не')}${vrow(p,'park','Паркиране','Има','Няма')}</div>
+   ${p.ph?`<div class="phone"><span id="phone">${p.ph}</span><button data-act="copy">${ic('copy')}Копирай</button></div>`:''}
+   <p class="verified">Източник: Google Maps, ${DATA_DATE}. <a href="${mapsLink(p)}">Отвори в Google Maps</a></p>`;
+  $('sheet').hidden=false;$('scrim').hidden=false;$('sheet').style.transform='';$('sheet').scrollTop=keep?st0:0;
+  $('sheet').classList.toggle('peek',S.tab==='map');$('scrim').hidden=S.tab==='map';
+  if(!keep){
+    S.follow=false;fabState();clearRoute();
+    if(S.youReal)fetchRoute(p,true);
+    else{if(!S.tracking)startTracking(false);
+      if(S.tab==='map'){const z=Math.max(map.getZoom(),15),pt=map.project(p.ll,z),hgt=map.getSize().y;map.setView(map.unproject(pt.add([0,hgt*.25]),z),z,{animate:true})}}
+    updDist(p);
+  }
   render(true);
 }
-function closeSheet(silent){S.sel=null;$('sheet').hidden=true;$('scrim').hidden=true;if(!silent)render(true)}
+function closeSheet(silent){S.sel=null;clearRoute();$('sheet').classList.remove('peek');$('sheet').hidden=true;$('scrim').hidden=true;if(!silent)render(true)}
 $('scrim').onclick=()=>closeSheet();
 $('sheet').addEventListener('click',e=>{
   const t=e.target.closest('[data-act]');if(!t)return;const p=P.find(x=>x.id===S.sel);vibrate();
@@ -1257,9 +1440,13 @@ $('sheet').addEventListener('click',e=>{
     try{navigator.clipboard.writeText(p.ph).then(()=>toast('Номерът е копиран'),()=>toast('Задръжте върху номера, за да го копирате'))}catch(_){toast('Задръжте върху номера, за да го копирате')}
   }
   if(a==='fav'){S.fav.has(p.id)?S.fav.delete(p.id):S.fav.add(p.id);store.set('budno-fav',[...S.fav]);
-    toast(S.fav.has(p.id)?'Добавено в любими':'Премахнато от любими');updateFavCount();select(p.id)}
+    toast(S.fav.has(p.id)?'Добавено в любими':'Премахнато от любими');updateFavCount();select(p.id,true)}
+  if(a==='v'){const k=t.dataset.k,v=+t.dataset.v,o=Object.assign({},VER[p.id]||{});
+    o[k]=o[k]===v?null:v;o.at=today();
+    if(['nhif','card','park'].every(x=>o[x]==null))delete VER[p.id];else VER[p.id]=o;
+    store.set(VKEY,VER);toast(o[k]==null?'Отметката е махната':'Записано');select(p.id,true)}
   if(a==='share'){const [la,ln]=p.ll.map(v=>v.toFixed(5));
-    const txt=`${p.n} — ${CATS[p.c].label}\n${p.a}, ${CITIES[p.city].name}\n${status(p).text} · тел. ${p.ph}\nhttps://www.google.com/maps/search/?api=1&query=${la},${ln}`;
+    const txt=`${p.n} — ${CATS[p.c].label}\n${p.a}, ${CITIES[p.city].name}\n${status(p).text}${p.ph?' · тел. '+p.ph:''}\n${mapsLink(p)}`;
     if(NATIVE){try{Android.share(txt);return}catch(_){}}
     if(navigator.share)navigator.share({text:txt}).catch(()=>{});else toast('Споделянето не е налично тук')}
 });
@@ -1274,7 +1461,7 @@ $('sheet').addEventListener('click',e=>{
 function updInfo(){try{return NATIVE&&Android.getUpdateInfo?JSON.parse(Android.getUpdateInfo()):null}catch(_){return null}}
 function renderInfo(){
   const u=updInfo();
-  $('vInfo').innerHTML=`<div class="hero"><svg width="64" height="64" style="border-radius:16px;flex:none"><use href="#logo"/></svg><div><h1>Будно</h1><p>Денонощни аптеки, дежурни аптеки, магазини и бензиностанции. Версия ${VERSION}${u&&u.source==='online'?' · обновена онлайн':''}</p></div></div>
+  $('vInfo').innerHTML=`<div class="hero"><svg width="64" height="64" style="border-radius:16px;flex:none"><use href="#logo"/></svg><div><h1>NightCare EU</h1><p>Помощ денонощно: аптеки, болници и спешни отделения, ветеринари, магазини и бензиностанции. Версия ${VERSION}${u&&u.source==='online'?' · обновена онлайн':''}</p></div></div>
  <div class="card"><h2>Цветове и маркери</h2><ul>${Object.keys(CATS).map(k=>`<li><span>${mkSVG(k,30)}</span><span><b>${CATS[k].label}</b><small>${CATS[k].desc}</small></span></li>`).join('')}</ul></div>
  <div class="card"><h2>Знаци</h2><ul>
   <li><span><i class="gdot"></i></span><span><b>Златна точка</b><small>Индекс на доверие 4,5 или повече</small></span></li>
@@ -1282,13 +1469,15 @@ function renderInfo(){
   <li><span><span class="nhif-tag">НЗОК</span></span><span><b>Работи със здравна каса</b><small>Договор с Националната здравноосигурителна каса</small></span></li>
   <li><span style="color:var(--muted)">${ic('nfc')}</span><span><b>Безконтактно плащане</b><small>Карта, телефон или часовник</small></span></li>
   <li><span><span class="cash">БРОЙ</span></span><span><b>Само в брой</b><small>Не приема карти</small></span></li>
+  <li><span style="color:var(--muted)">${ic('call')}</span><span><b>Слушалка</b><small>Има телефон за връзка</small></span></li>
   <li><span style="color:var(--accent)">${ic('nav','fill')}</span><span><b>Режим „Следвай ме“</b><small>Картата и разстоянията се обновяват, докато се движите</small></span></li></ul></div>
+ ${myChecksCard()}
  <div class="card"><h2>Индекс на доверие</h2><p><code>(50 × 4,2 + оценка × отзиви) ÷ (50 + отзиви)</code></p><p>Обект с 5,0 от 3 отзива не изпреварва обект с 4,7 от 800 отзива.</p></div>
  ${NATIVE&&u?`<div class="card"><h2>Обновяване онлайн</h2>
    <p>${u.url?`Приложението проверява за нова версия при всяко отваряне и на всеки 10 минути.<br>Последна проверка: ${u.checked||'още не'}`:'Въведете адреса на канала за обновления. След това всички промени идват автоматично, без ново инсталиране.'}</p>
    <input id="updUrl" class="field" type="url" inputmode="url" placeholder="https://raw.githubusercontent.com/…/index.html" value="${esc(u.url||'')}">
    <div class="row2"><button class="btn" id="updSave">Запази и провери</button>${u.source==='online'?'<button class="btn ghost" id="updReset">Върни вградената</button>':''}</div></div>`:''}
- <div class="card"><h2>За данните</h2><p>Обектите са примерни, с измислени имена, оценки и телефони. Сателитните снимки са от Esri, картата е от OpenStreetMap и CARTO.</p></div>`;
+ <div class="card"><h2>За данните</h2><p>Обектите, адресите, телефоните, работното време и оценките са от Google Maps към ${DATA_DATE}. Данни за НЗОК, плащане и паркиране са показани само там, където има източник. Сателитните снимки са от Esri. Картата, имената на улици, сгради и учреждения и търсенето на адреси са от OpenStreetMap (на български); надписите върху сателита са от CARTO.</p></div>`;
 }
 $('vInfo').addEventListener('click',e=>{
   if(e.target.id==='updSave'){const v=$('updUrl').value.trim();
@@ -1297,6 +1486,18 @@ $('vInfo').addEventListener('click',e=>{
   if(e.target.id==='updReset'){try{Android.resetToBuiltIn()}catch(_){}}
 });
 
+function myChecksCard(){const ids=Object.keys(VER),todo=P.filter(p=>p.pharm&&!nhifOf(p)).length;
+  return `<div class="card"><h2>Моите проверки</h2><p>Проверени от вас: <b>${ids.length}</b> обекта. Аптеки без данни за НЗОК: <b>${todo}</b> — вижте ги с филтъра „За проверка“ в Списък.</p>
+   <div class="row2"><button class="btn" id="goCheck">Покажи за проверка</button>${ids.length?'<button class="btn ghost" id="sendVer">Изпрати проверките</button>':''}</div></div>`}
+function checksText(){const yn=v=>v==null?'—':v?'Да':'Не';
+  return 'NightCare EU — проверки\n'+Object.keys(VER).map(id=>{const p=P.find(x=>x.id===id);if(!p)return '';const v=VER[id];
+   return `${p.n}, ${p.a}, ${CITIES[p.city].name} — НЗОК: ${p.pharm?yn(v.nhif):'н/п'}; Карта: ${yn(v.card)}; Паркинг: ${v.park==null?'—':v.park?'Има':'Няма'} (${v.at})`}).filter(Boolean).join('\n')}
+$('vInfo').addEventListener('click',e=>{
+  if(e.target.id==='goCheck'){S.flags=new Set(['tocheck']);S.cats=new Set(['p24','duty']);renderRail();setTab('list')}
+  if(e.target.id==='sendVer'){const t=checksText();
+    if(NATIVE){try{Android.share(t);return}catch(_){}}
+    if(navigator.share)navigator.share({text:t}).catch(()=>{});else{try{navigator.clipboard.writeText(t);toast('Копирано')}catch(_){}}}
+});
 /* tabs */
 function setTab(t){
   S.tab=t;
@@ -1320,7 +1521,7 @@ window.budnoUpdated=function(v){toast('Приложението е обнове�
 
 let tt;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,m.length>60?4200:2200)}
 $('q').addEventListener('input',e=>{S.q=e.target.value;render()});
-$('q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();setTab('list')}});
+$('q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();setTab('list');geocode(e.target.value)}});
 $('city').value=S.city;
 $('city').addEventListener('change',e=>{S.city=e.target.value;store.set('budno-city',S.city);
   if(S.tracking)stopTracking();loadCity()});
@@ -1331,7 +1532,7 @@ function render(keep){
   if(S.tab==='list'||S.tab==='fav'){const sc=$('vList').scrollTop;renderList(lastR);if(keep)$('vList').scrollTop=sc}
   renderPins();
 }
-function loadCity(){const c=CITIES[S.city];S.you=toLL(S.city,c.center[0]+20,c.center[1]+30);S.youReal=false;$('hint').hidden=false;
+function loadCity(){const c=CITIES[S.city];S.you=c.ll.slice();S.youReal=false;$('hint').hidden=false;
   closeSheet(true);map.setView(c.ll,13,{animate:false});render()}
 renderRail();updateFavCount();fabState();loadCity();
 new ResizeObserver(()=>map.invalidateSize()).observe($('vMap'));
